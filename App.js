@@ -1,23 +1,61 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Container, Header, Title, Content, Footer, FooterTab } from 'native-base';
+import { Button, Left, Right, Body, Icon, Text } from 'native-base';
+import { AppLoading, Font } from 'expo';
 
 export default class App extends React.Component {
+  state = {
+    fontLoaded: false,
+  };
+
+  async componentWillMount() {
+    try {
+      await Font.loadAsync({
+        'Roboto': require('./node_modules/native-base/Fonts/Roboto.ttf'),
+        'Roboto_medium': require('./node_modules/native-base/Fonts/Roboto_medium.ttf'),
+      });
+      this.setState({ fontLoaded: true });
+    } catch (e) {
+      console.log('error loadin fonts', e);
+    }
+
+  }
+
   render() {
+    if (!this.state.fontLoaded) {
+      return < AppLoading />;
+    }
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-      </View>
+      <Container>
+        <Header style={{backgroundColor: "red"}}>
+          <Left>
+            <Button transparent>
+              <Icon name='menu' />
+            </Button>
+          </Left>
+          <Body>
+            <Title>
+              Apuesta MUNdial
+            </Title>
+          </Body>
+          
+        </Header>
+        <Content>
+
+          <Text> Bienvenidos Apuesta MUNdial !!</Text>
+
+        </Content>
+        <Footer>
+          <FooterTab style={{backgroundColor: "red"}}>
+            <Button iconLeft transparent primary>
+              <Icon name='beer' />
+              <Text>Pub</Text>
+            </Button>
+
+          </FooterTab>
+        </Footer>
+      </Container>
+
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
