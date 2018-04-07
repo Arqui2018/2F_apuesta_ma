@@ -1,7 +1,6 @@
 import React from 'react';
-import { Container, Header, Title, Content, Footer, FooterTab } from 'native-base';
-import { Button, Left, Right, Body, Icon, Text } from 'native-base';
 import { AppLoading, Font } from 'expo';
+import Login from "./src/Login/login.js";
 
 export default class App extends React.Component {
   state = {
@@ -25,37 +24,6 @@ export default class App extends React.Component {
     if (!this.state.fontLoaded) {
       return < AppLoading />;
     }
-    return (
-      <Container>
-        <Header style={{backgroundColor: "red"}}>
-          <Left>
-            <Button transparent>
-              <Icon name='menu' />
-            </Button>
-          </Left>
-          <Body>
-            <Title>
-              Apuesta MUNdial
-            </Title>
-          </Body>
-          
-        </Header>
-        <Content>
-
-          <Text> Bienvenidos Apuesta MUNdial !!</Text>
-
-        </Content>
-        <Footer>
-          <FooterTab style={{backgroundColor: "red"}}>
-            <Button iconLeft transparent primary>
-              <Icon name='beer' />
-              <Text>Pub</Text>
-            </Button>
-
-          </FooterTab>
-        </Footer>
-      </Container>
-
-    );
+    return <Login />;
   }
 }
