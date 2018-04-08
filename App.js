@@ -1,6 +1,8 @@
 import React from 'react';
 import { AppLoading, Font } from 'expo';
+import { StackNavigator, DrawerNavigator } from "react-navigation";
 import Login from "./src/Login/login.js";
+import Home from "./src/Index/home.js";
 
 export default class App extends React.Component {
   state = {
@@ -24,6 +26,6 @@ export default class App extends React.Component {
     if (!this.state.fontLoaded) {
       return < AppLoading />;
     }
-    return <Login />;
+    return <Home />;
   }
 }

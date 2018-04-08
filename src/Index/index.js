@@ -3,7 +3,7 @@ import { Container, Header, Title, Content, Footer, FooterTab } from 'native-bas
 import { Button, Left, Right, Body, Icon, Text, Form, Item } from 'native-base';
 import { Input, Label } from 'native-base';
 
-export default class Login extends React.Component{
+export default class index extends React.Component{
   render(){
     return (
       <Container>
@@ -26,17 +26,6 @@ export default class Login extends React.Component{
             <Text style={{alignSelf: "center"}} >
               ¡¡Welcome!!
             </Text>
-            <Form>
-              <Item>
-                <Input placeholder="Username" />
-              </Item>
-              <Item>
-                <Input placeholder="Password" secureTextEntry={true} />
-              </Item>
-            </Form>
-            <Button rounded danger style={{ marginTop: 25, alignSelf: "center" }}>
-              <Text>Sign In</Text>
-            </Button>
           </Content>
 
         </Container>
