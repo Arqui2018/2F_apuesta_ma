@@ -2,9 +2,13 @@ import React from 'react';
 import { Container, Header, Title, Content, Footer, FooterTab } from 'native-base';
 import { Button, Left, Right, Body, Icon, Text, Form, Item } from 'native-base';
 import { Input, Label } from 'native-base';
+import { Image, View } from 'react-native';
+// import ResponsiveImage from 'react-native-responsive-image';
 
 export default class index extends React.Component{
+
   render(){
+    console.log(this.state);
     return (
       <Container>
         <Header style={{backgroundColor: "red"}}>
@@ -15,31 +19,28 @@ export default class index extends React.Component{
           </Left>
           <Body>
             <Title>
-              Apuesta MUNdial
+              Apuesta mUNdial
             </Title>
           </Body>
-
         </Header>
         <Container>
-
           <Content padder>
-            <Text style={{alignSelf: "center"}} >
-              ¡¡Welcome!!
-            </Text>
+            <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+              <Image
+                source={require('../assets/copa.png')}
+                style={{height: 380, width: "100%" }}
+              />
+            </View>
           </Content>
-
         </Container>
         <Footer>
           <FooterTab style={{backgroundColor: "red"}}>
-            <Button iconLeft transparent primary>
-              <Icon name='beer' />
+            <Button iconLeft transparent light>
+              <Icon name='beer'/>
             </Button>
-
           </FooterTab>
         </Footer>
-
       </Container>
-
     );
   }
 }

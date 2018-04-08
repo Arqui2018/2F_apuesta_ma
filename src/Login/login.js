@@ -17,31 +17,25 @@ export default class Login extends React.Component{
             </Button>
           </Left>
           <Body>
-          <Image
-            source={{ imgHead }}
-            style={{
-              alignSelf: "stretch"
-            }}
-          />
+            <Title>
+              Apuesta mUNdial
+            </Title>
           </Body>
 
         </Header>
         <Container>
 
           <Content padder>
-            <Text style={{alignSelf: "center"}} >
-              ¡¡Welcome!!
-            </Text>
             <Form>
               <Item>
-                <Input placeholder="Username" />
+                <Input placeholder="Correo electrónico" />
               </Item>
               <Item>
-                <Input placeholder="Password" secureTextEntry={true} />
+                <Input placeholder="Contraseña" secureTextEntry={true} />
               </Item>
             </Form>
             <Button rounded danger style={{ marginTop: 25, alignSelf: "center" }}>
-              <Text>Sign In</Text>
+              <Text>Iniciar sesión</Text>
             </Button>
           </Content>
 

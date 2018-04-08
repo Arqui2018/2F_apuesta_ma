@@ -3,8 +3,15 @@ import { AppLoading, Font } from 'expo';
 import { StackNavigator, DrawerNavigator } from "react-navigation";
 import Login from "./src/Login/login.js";
 import Home from "./src/Index/home.js";
+import ApolloClient from "apollo-boost";
+import { ApolloProvider } from "react-apollo";
+
+const client = new ApolloClient({
+  uri: "http://35.194.70.72:4000/graphql"
+});
 
 export default class App extends React.Component {
+
   state = {
     fontLoaded: false,
   };
@@ -24,8 +31,13 @@ export default class App extends React.Component {
 
   render() {
     if (!this.state.fontLoaded) {
-      return < AppLoading />;
+      return <AppLoading />;
     }
-    return <Home />;
+
+    return (
+      <ApolloProvider client={client}>
+        <Home />
+      </ApolloProvider>
+    );
   }
 }

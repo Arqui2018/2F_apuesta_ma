@@ -3,7 +3,7 @@ import { AppRegistry, Image, StatusBar } from "react-native";
 import { Button, Text, Container, List, Icon } from "native-base";
 import { ListItem, Content, Left, Body, Right } from "native-base";
 
-const routes = ["Home", "Login", "Profile", "Matches", "Bet"];
+const routes = {home: 'Inicio', Login: 'Iniciar sesión', Profile: 'Perfil', Matches: 'Partidos', Bet: 'Apuesta' };
 
 export default class SideBar extends React.Component {
   render() {
@@ -24,7 +24,7 @@ export default class SideBar extends React.Component {
           />
 
           <List
-            dataArray={routes}
+            dataArray={Object.keys(routes)}
             contentContainerStyle={{ marginTop: 120 }}
             renderRow={data => {
               return (
@@ -33,7 +33,7 @@ export default class SideBar extends React.Component {
                   onPress={() => this.props.navigation.navigate(data)}
                 >
 
-                  <Body><Text>{data}</Text></Body>
+                  <Body><Text>{routes[data]}</Text></Body>
                   <Right><Icon name="md-arrow-dropright" /></Right>
                 </ListItem>
               );
