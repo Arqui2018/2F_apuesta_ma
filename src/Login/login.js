@@ -1,7 +1,10 @@
 import React from 'react';
+import { Image } from "react-native";
 import { Container, Header, Title, Content, Footer, FooterTab } from 'native-base';
 import { Button, Left, Right, Body, Icon, Text, Form, Item } from 'native-base';
 import { Input, Label } from 'native-base';
+
+const imgHead = require("../assets/Ap_mUN.png");
 
 export default class Login extends React.Component{
   render(){
@@ -9,14 +12,17 @@ export default class Login extends React.Component{
       <Container>
         <Header style={{backgroundColor: "red"}}>
           <Left>
-            <Button transparent onPress={() => this.props.navigation.navigate("DrawerOpen")}>
-              <Icon name='menu' />
+            <Button transparent onPress={() => this.props.navigation.goBack()}>
+              <Icon name="arrow-back" />
             </Button>
           </Left>
           <Body>
-            <Title>
-              Apuesta MUNdial
-            </Title>
+          <Image
+            source={{ imgHead }}
+            style={{
+              alignSelf: "stretch"
+            }}
+          />
           </Body>
 
         </Header>
@@ -45,7 +51,6 @@ export default class Login extends React.Component{
           <FooterTab style={{backgroundColor: "red"}}>
             <Button iconLeft transparent primary>
               <Icon name='beer' />
-              <Text>Pub</Text>
             </Button>
 
           </FooterTab>

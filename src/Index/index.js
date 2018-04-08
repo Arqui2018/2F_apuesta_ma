@@ -29,16 +29,15 @@ export default class index extends React.Component{
           </Content>
 
         </Container>
-
         <Footer>
           <FooterTab style={{backgroundColor: "red"}}>
             <Button iconLeft transparent primary>
               <Icon name='beer' />
-              <Text>Pub</Text>
             </Button>
 
           </FooterTab>
         </Footer>
+
       </Container>
 
     );
