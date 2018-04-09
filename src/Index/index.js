@@ -3,12 +3,10 @@ import { Container, Header, Title, Content, Footer, FooterTab } from 'native-bas
 import { Button, Left, Right, Body, Icon, Text, Form, Item } from 'native-base';
 import { Input, Label } from 'native-base';
 import { Image, View } from 'react-native';
-// import ResponsiveImage from 'react-native-responsive-image';
 
 export default class index extends React.Component{
 
   render(){
-    console.log(this.state);
     return (
       <Container>
         <Header style={{backgroundColor: "red"}}>

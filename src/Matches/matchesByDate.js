@@ -182,6 +182,40 @@ export default class Bet extends Component {
     }
   }
 
+  sendResult() {
+    const result = {
+    	user_id: 1,
+      amount: parseInt(this.state.amount),
+      date: new Date().toString(),
+      g_local: parseInt(this.state.goalsLocal),
+      g_visit: parseInt(this.state.goalsVisitor),
+      winner: false,
+      match_id: parseInt(this.state.match_id),
+      wallet_id: 6070,
+    };
+
+    const ADD_RESULT = gql`
+      mutation addTodo($type: String!) {
+        addTodo(type: $type) {
+          id
+          type
+        }
+      }
+    `;
+
+    const AddResult = () => {
+        <Mutation mutation={ADD_TODO}>
+        {(addTodo, { data }) => (
+          <div>
+            {Alert.alert('Apuesta enviada exitosamente')};
+          </div>
+        )}
+      </Mutation>
+    };
+
+    AddResult();
+  }
+
   render() {
     return (
       <Container>
@@ -307,7 +341,7 @@ export default class Bet extends Component {
                     </Item>
                   </Col>
                 </Grid>
-                <Button rounded danger style={{ marginTop: 25, alignSelf: "center" }}>
+                <Button onPress={this.sendResult} rounded danger style={{ marginTop: 25, alignSelf: "center" }}>
                   <Text>Apostar</Text>
                 </Button>
               </View>
