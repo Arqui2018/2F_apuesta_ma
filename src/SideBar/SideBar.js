@@ -3,7 +3,7 @@ import { AppRegistry, Image, StatusBar } from "react-native";
 import { Button, Text, Container, List, Icon } from "native-base";
 import { ListItem, Content, Left, Body, Right } from "native-base";
 
-const routes = {home: 'Inicio', Login: 'Iniciar sesión', Profile: 'Perfil', MatchesByDate: 'Partidos', Bet: 'Apuesta' };
+const routes = { Home: 'Inicio', Login: 'Iniciar sesión', Profile: 'Perfil', MatchesByDate: 'Partidos', Bet: 'Apuesta' };
 
 export default class SideBar extends React.Component {
   render() {
