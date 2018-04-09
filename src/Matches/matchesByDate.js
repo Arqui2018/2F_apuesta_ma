@@ -45,6 +45,7 @@ export default class Bet extends Component {
       allResults: null,
       goalsLocal: '',
       goalsVisitor: '',
+      match_id: null,
       amount: '',
       well: '',
       bets: '',
@@ -115,6 +116,7 @@ export default class Bet extends Component {
     var nameTeamLocal = this.state.allTeams[match.team_local_id - 1].name;
     var nameTeamVisitor = this.state.allTeams[match.team_visitor_id - 1].name;
     this.setState({teamLocal: nameTeamLocal, teamVisitor: nameTeamVisitor});
+    this.setState({match_id: match.id})
     client
       .query({
         query: gql`
@@ -136,30 +138,47 @@ export default class Bet extends Component {
       });
   }
 
-  setGoalsLocal(goalsLocal) {
-    this.setState({goalsLocal});
+  async setGoalsLocal(goalsLocal) {
+    await this.setState({goalsLocal});
     this.calculateStadistics();
   }
 
-  setGoalsVisitor(goalsVisitor) {
-    this.setState({goalsVisitor});
+  async setGoalsVisitor(goalsVisitor) {
+    await this.setState({goalsVisitor});
     this.calculateStadistics();
   }
 
-  setAmount(amount) {
-    this.setState({amount});
+  async setAmount(amount) {
+    // min 50 max 1 millon
+    await this.setState({amount});
     this.calculateStadistics();
   }
 
   calculateStadistics() {
     if (this.state.goalsLocal.length && this.state.goalsVisitor.length && this.state.amount) {
-      Alert.alert('Jhon is the best');
-      var auxWell;
-      this.state.allResults();
-      // well: '',
-      // bets: '',
-      // toWin: '',
-      // results: ''
+      // Alert.alert('Jhon is the best');
+      var auxWell = 0;
+      var auxWellDif = 0;
+      var auxBets = 0;
+      var auxResults = 0;
+      this.state.allResults.forEach(item => {
+        if (item.match_id == this.state.match_id) {
+          auxWell += item.amount;
+          auxBets++;
+        }
+        if (item.g_local == parseInt(this.state.goalsLocal) && item.g_visit == parseInt(this.state.goalsVisitor)) {
+          auxResults++;
+        }
+        else {
+          if (item.match_id == this.state.match_id)
+            auxWellDif += item.amount;
+        }
+      });
+
+      auxWell = parseInt((auxWell + parseInt(this.state.amount)) * 0.95);
+      this.setState({well: String(auxWell), bets: String(auxBets), results: String(auxResults)});
+      var percentWell = ((parseInt(this.state.amount) * 95) / auxWell) / 100;
+      this.setState({toWin: String(parseInt(percentWell * auxWellDif + (parseInt(this.state.amount) * 0.95)))});
     }
   }
 
@@ -180,12 +199,12 @@ export default class Bet extends Component {
         </Header>
 
         <Content padder>
-          <H1 style={{ textAlign: 'center' }}>
-            {this.state.isMatches && 'Fecha'}
-            {this.state.isMatchesByDay && 'Partidos'}
-          </H1>
+          {this.state.isMatches && <H1 style={{ textAlign: 'center' }}>Fecha</H1>}
+          {this.state.isMatchesByDay && <H1 style={{ textAlign: 'center' }}>Partidos</H1>}
+
           {
-            (this.state.isMatches && this.state.allMatches) &&
+            (this.state.isMatches && this.state.allMatches)
+              ?
               <List>
                 {new Array(15).fill().map((item, i) =>
                   <ListItem
@@ -197,6 +216,11 @@ export default class Bet extends Component {
                   </ListItem>
                 )}
               </List>
+              : (!this.state.isMatchesByDay && !this.state.isBet &&
+                  <View stye={{flexDirection: 'row', justifyContent: 'space-around', padding: 10 }}>
+                    <Spinner color='red' size="large" />
+                  </View>
+                )
           }
 
           {
@@ -262,24 +286,24 @@ export default class Bet extends Component {
                   <Col style={{ marginTop: 25 }}>
                     <Text style={{alignSelf: "center"}}>Pozo</Text>
                     <Item rounded>
-                      <Input disabled placeholder='well' />
+                      <Input disabled value={this.state.well} />
                     </Item>
 
-                    <Text style={{alignSelf: "center"}}>Posible Ganancia</Text>
+                    <Text style={{alignSelf: "center"}}>Numero de Apuestas</Text>
                     <Item rounded>
-                      <Input disabled placeholder='$ to win' />
+                      <Input disabled value={this.state.bets} />
                     </Item>
                   </Col>
 
                   <Col style={{ marginTop: 25 }}>
-                    <Text style={{alignSelf: "center"}}>Numero de Apuestas</Text>
+                    <Text style={{alignSelf: "center"}}>Posible Ganancia</Text>
                     <Item rounded>
-                      <Input disabled placeholder='# bets' />
+                      <Input disabled value={this.state.toWin} />
                     </Item>
 
-                    <Text style={{alignSelf: "center"}}>Cantidad de Apuestas</Text>
+                    <Text style={{alignSelf: "center"}}>Mismo marcador</Text>
                     <Item rounded>
-                      <Input disabled placeholder='# Results' />
+                      <Input disabled value={this.state.results} />
                     </Item>
                   </Col>
                 </Grid>
