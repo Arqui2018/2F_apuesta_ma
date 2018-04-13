@@ -14,7 +14,7 @@ const HomeRouter = DrawerNavigator(
     Login: { screen: LoginScreen },
     Profile: { screen: ProfileScreen },
     MatchesByDate: { screen: MatchesByDateScreen },
-    Bet: { screen: BetScreen },
+    
     MatchesByDay: { screen: MatchesByDayScreen }
   },
   {

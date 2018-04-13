@@ -22,7 +22,7 @@ import {
   Text,
   Title
 } from 'native-base';
-import {Query} from 'react-apollo';
+import {Query, Mutation} from 'react-apollo';
 import gql from 'graphql-tag';
 import { client } from '../../App';
 import { Alert, View } from 'react-native';
@@ -46,7 +46,6 @@ export default class Bet extends Component {
       goalsLocal: '',
       goalsVisitor: '',
       match_id: null,
-      amount: '',
       well: '',
       bets: '',
       toWin: '',
@@ -186,26 +185,32 @@ export default class Bet extends Component {
     const result = {
     	user_id: 1,
       amount: parseInt(this.state.amount),
-      date: new Date().toString(),
       g_local: parseInt(this.state.goalsLocal),
       g_visit: parseInt(this.state.goalsVisitor),
-      winner: false,
       match_id: parseInt(this.state.match_id),
       wallet_id: 6070,
     };
 
     const ADD_RESULT = gql`
-      mutation addTodo($type: String!) {
-        addTodo(type: $type) {
-          id
-          type
+      mutation AddResult($user_id: Int!, $amount: Int!, $g_local: Int!,
+                  $g_visit: Int!, $match_id: Int!, $wallet_id: Int!)  {
+        AddResult(user_id: $user_id, amount: $amount, g_local: $g_local,
+                  g_visit: $g_visit, match_id: $match_id, wallet_id: $wallet_id) {
+          user_id
+          amount
+          date
+          g_local
+          g_visit
+          winner
+          match_id
+          wallet_id
         }
       }
     `;
 
     const AddResult = () => {
-        <Mutation mutation={ADD_TODO}>
-        {(addTodo, { data }) => (
+      <Mutation mutation={ADD_RESULT}>
+        {(AddResult, { data }) => (
           <div>
             {Alert.alert('Apuesta enviada exitosamente')};
           </div>
