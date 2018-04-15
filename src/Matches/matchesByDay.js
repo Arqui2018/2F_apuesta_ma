@@ -5,30 +5,95 @@ import {
   Button,
   Container,
   Content,
-  Footer,
-  FooterTab,
   Header,
   H1,
+  H2,
   Icon,
+  Item,
+  Input,
   Left,
   List,
   ListItem,
   Root,
+  Right,
   Spinner,
   Text,
   Title
 } from 'native-base';
-import {Query} from 'react-apollo';
+import Footer from '../components/Footer.js';
 import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
 
-export default class Bet extends Component {
+export default class MatchesByDay extends Component {
 
-  constructor(props) {
-    super(props);
+  getNameTeam(idTeam) {
+    const GET_NAME_TEAM = gql`
+      query teamById($idTeam: Int!) {
+        teamById(id: $idTeam) {
+          name
+        }
+      }
+    `;
+
+    return (
+      <Query query={GET_NAME_TEAM} variables={{ idTeam }}>
+        {({ loading, error, data }) => {
+
+          if (loading)
+            return 'Loading...';
+          if (error)
+            return `Error!: ${error}`;
+
+          return data.teamById.name.toString();
+        }}
+      </Query>
+    );
   }
 
-  componentWillMount() {
-    console.log(this.props.matches);
+  getMatchesByDay() {
+    const day = parseInt(this.props.navigation.state.params.day);
+    const GET_MATCHES = gql`
+      {
+        allMatches {
+          id
+          team_local_id
+          team_visitor_id
+          date
+        }
+      }
+    `;
+
+    return (
+      <Query query={GET_MATCHES}>
+        {({ loading, error, data }) => {
+
+          if (loading)
+            return <Spinner/>;
+          if (error)
+            return <Text>Error :(</Text>;
+
+          var matches = [];
+          let dayAllMathes;
+          data.allMatches.forEach(item => {
+            dayAllMathes = parseInt(new Date(item.date).getDate());
+            if (dayAllMathes === day)
+              matches.push(item);
+          });
+
+          return matches.map((match, i) =>
+            <ListItem
+              key={i}
+              onPress={() => this.props.navigation.navigate('Bet', {match, day})}
+            >
+              <Body>
+                <Text>{this.getNameTeam(match.team_local_id)} {` VS `} {this.getNameTeam(match.team_visitor_id)}</Text>
+              </Body>
+              <Right><Icon name="md-arrow-dropright" /></Right>
+            </ListItem>
+          );
+        }}
+      </Query>
+    );
   }
 
   render() {
@@ -36,8 +101,8 @@ export default class Bet extends Component {
       <Container>
         <Header style={{ backgroundColor: 'red' }}>
           <Left>
-            <Button transparent onPress={() => this.props.navigation.navigate('DrawerOpen')}>
-              <Icon name='menu'/>
+            <Button transparent onPress={() => this.props.navigation.navigate('MatchesByDate')}>
+              <Icon name="arrow-back" />
             </Button>
           </Left>
           <Body>
@@ -49,17 +114,14 @@ export default class Bet extends Component {
 
         <Content padder>
           <H1 style={{ textAlign: 'center' }}>Partidos</H1>
-
+          <List>
+            {this.getMatchesByDay()}
+          </List>
         </Content>
 
-        <Footer>
-          <FooterTab style={{ backgroundColor: 'red' }}>
-            <Button iconLeft transparent light>
-              <Icon name='beer'/>
-            </Button>
-          </FooterTab>
-        </Footer>
+        <Footer />
       </Container>
+
     );
   }
 }
