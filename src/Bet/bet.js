@@ -205,8 +205,8 @@ export default class Bet extends Component {
 
 
               createResult({ variables: { result }});
-              Alert.alert(`I'am the fuck lord`);
-              // return
+              Alert.alert('Felicitaciones', 'Apuesta creata Exitosamente');
+              this.props.navigation.navigate('Home'); // return home
             }} rounded danger style={{ marginTop: 25, alignSelf: "center" }}>
               <Text>Apostar</Text>
             </Button>
