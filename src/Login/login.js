@@ -1,8 +1,9 @@
 import React from 'react';
 import { Image } from "react-native";
-import { Container, Header, Title, Content, Footer, FooterTab } from 'native-base';
+import { Container, Header, Title, Content } from 'native-base';
 import { Button, Left, Right, Body, Icon, Text, Form, Item } from 'native-base';
 import { Input, Label } from 'native-base';
+import Footer from '../components/Footer.js';
 
 const imgHead = require("../assets/Ap_mUN.png");
 
@@ -41,14 +42,7 @@ export default class Login extends React.Component{
 
         </Container>
 
-        <Footer>
-          <FooterTab style={{backgroundColor: "red"}}>
-            <Button iconLeft transparent primary>
-              <Icon name='beer' />
-            </Button>
-
-          </FooterTab>
-        </Footer>
+        <Footer />
       </Container>
 
     );

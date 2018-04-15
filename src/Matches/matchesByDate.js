@@ -5,8 +5,6 @@ import {
   Button,
   Container,
   Content,
-  Footer,
-  FooterTab,
   Header,
   H1,
   H2,
@@ -27,6 +25,7 @@ import gql from 'graphql-tag';
 import { client } from '../../App';
 import { Alert, View } from 'react-native';
 import { Col, Row, Grid } from 'react-native-easy-grid';
+import Footer from '../components/Footer.js';
 
 export default class Bet extends Component {
   constructor(props) {
@@ -353,14 +352,8 @@ export default class Bet extends Component {
           }
         </Content>
 
-        <Footer>
-          <FooterTab style={{ backgroundColor: 'red' }}>
-            <Button iconLeft transparent light>
-              <Icon name='beer'/>
-            </Button>
-          </FooterTab>
-        </Footer>
-      </Container>)
-    ;
+        <Footer />
+      </Container>
+    );
   }
 }

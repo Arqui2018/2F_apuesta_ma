@@ -1,10 +1,25 @@
-import React from 'react';
-import { Container, Header, Title, Content, Footer, FooterTab } from 'native-base';
-import { Button, Left, Right, Body, Icon, Text, Form, Item } from 'native-base';
-import { Input, Label } from 'native-base';
+import React, { Component } from 'react';
+import {
+  Body,
+  Button,
+  Container,
+  Content,
+  FooterTab ,
+  Form,
+  Header,
+  Icon,
+  Input,
+  Item,
+  Label,
+  Left,
+  Right,
+  Text,
+  Title
+} from 'native-base';
 import { Image, View } from 'react-native';
+import Footer from '../components/Footer.js';
 
-export default class index extends React.Component{
+export default class index extends Component {
 
   render(){
     return (
@@ -21,23 +36,17 @@ export default class index extends React.Component{
             </Title>
           </Body>
         </Header>
-        <Container>
-          <Content padder>
-            <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
-              <Image
-                source={require('../assets/copa.png')}
-                style={{height: 380, width: "100%" }}
-              />
-            </View>
-          </Content>
-        </Container>
-        <Footer>
-          <FooterTab style={{backgroundColor: "red"}}>
-            <Button iconLeft transparent light>
-              <Icon name='beer'/>
-            </Button>
-          </FooterTab>
-        </Footer>
+
+        <Content padder>
+          <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+            <Image
+              source={require('../assets/copa.png')}
+              style={{height: 380, width: "100%" }}
+            />
+          </View>
+        </Content>
+        <Footer />
+
       </Container>
     );
   }

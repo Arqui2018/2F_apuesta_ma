@@ -1,8 +1,9 @@
 import React from 'react';
 import { ListView } from 'react-native';
-import { Container, Header, Title, Content, Footer, FooterTab } from 'native-base';
+import { Container, Header, Title, Content } from 'native-base';
 import { Button, Body, Icon, Left, Text, Item } from 'native-base';
 import { Input, List, ListItem, Row } from 'native-base';
+import Footer from '../components/Footer.js';
 
 const imgHead = require("../assets/Ap_mUN.png");
 const datas = [
@@ -80,16 +81,9 @@ export default class Profile extends React.Component{
           </Content>
         </Container>
 
-        <Footer>
-          <FooterTab style={{backgroundColor: "red"}}>
-            <Button iconLeft transparent primary>
-              <Icon name='beer' />
-            </Button>
+        <Footer />
 
-          </FooterTab>
-        </Footer>
       </Container>
-
     );
   }
 }
