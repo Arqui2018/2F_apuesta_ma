@@ -3,8 +3,9 @@ import { Container, Header, Content, H1, Text, Icon, Left, Body, Title, Button, 
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import Footer from '../components/Footer.js';
 import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
+import { Mutation, Query } from "react-apollo";
 import { client } from '../../App';
+import { Alert } from 'react-native';
 
 export default class Bet extends Component {
 
@@ -45,6 +46,7 @@ export default class Bet extends Component {
       .then(data => {
         this.setState({ allResults: data.data.allResults });
       });
+    // console.log(client);
   }
 
   getNameTeam(idTeam) {
@@ -114,7 +116,107 @@ export default class Bet extends Component {
     }
   }
 
+  bodyBet() {
 
+    const ADD_RESULT = gql`
+      mutation createResult($result: ResultInput!) {
+        createResult(result: $result) {
+          user_id
+        }
+      }
+    `;
+
+    return (
+      <Mutation mutation={ADD_RESULT}>
+        {(createResult, { data }) => (
+          <Content>
+
+            <H1 style={{alignSelf: "center"}}>Hora de Apostar!!!</H1>
+            <Grid>
+              <Col style={{ marginTop: 15, height: 90 }}>
+                <Text style={{alignSelf: "center"}}>
+                  {this.getNameTeam(this.state.match.team_local_id)}
+                </Text>
+                <Item rounded style={{alignSelf: "center"}}>
+                  <Input
+                    keyboardType = 'numeric'
+                    value={this.state.goalsLocal}
+                    onChangeText={(goalsLocal) => this.setGoalsLocal(goalsLocal)}
+                  />
+                </Item>
+              </Col>
+
+              <Col style={{ marginTop: 15, height: 90 }}>
+                <Text style={{alignSelf: "center"}}>
+                  {this.getNameTeam(this.state.match.team_visitor_id)}
+                </Text>
+                <Item rounded style={{alignSelf: "center"}}>
+                  <Input
+                    keyboardType = 'numeric'
+                    value={this.state.goalsVisitor}
+                    onChangeText={(goalsVisitor) => this.setGoalsVisitor(goalsVisitor)}
+                  />
+                </Item>
+              </Col>
+            </Grid>
+            <Text style={{alignSelf: "center"}}>Cantidad de Apuesta</Text>
+            <Item rounded style={{width: 80, alignSelf: "center"}}>
+              <Input
+                keyboardType = 'numeric'
+                value={this.state.amount}
+                onChangeText={(amount) => this.setAmount(amount)}
+              />
+            </Item>
+
+            <Grid>
+              <Col style={{ marginTop: 25 }}>
+                <Text style={{alignSelf: "center"}}>Pozo</Text>
+                <Item rounded>
+                  <Input disabled value={this.state.well} />
+                </Item>
+
+                <Text style={{alignSelf: "center"}}>Numero de Apuestas</Text>
+                <Item rounded>
+                  <Input disabled value={this.state.bets} />
+                </Item>
+              </Col>
+
+              <Col style={{ marginTop: 25 }}>
+                <Text style={{alignSelf: "center"}}>Posible Ganancia</Text>
+                <Item rounded>
+                  <Input disabled value={this.state.toWin} />
+                </Item>
+
+                <Text style={{alignSelf: "center"}}>Mismo marcador</Text>
+                <Item rounded>
+                  <Input disabled value={this.state.results} />
+                </Item>
+              </Col>
+            </Grid>
+            <Button onPress={() => {
+              const result = {
+                user_id: 1,
+                amount: parseInt(this.state.amount),
+                g_local: parseInt(this.state.goalsLocal),
+                g_visit: parseInt(this.state.goalsVisitor),
+                match_id: parseInt(this.state.match.id),
+                wallet_id: 6070,
+              };
+
+
+              createResult({ variables: { result }});
+              Alert.alert(`I'am the fuck lord`);
+              // return
+            }} rounded danger style={{ marginTop: 25, alignSelf: "center" }}>
+              <Text>Apostar</Text>
+            </Button>
+
+          </Content>
+
+      )}
+      </Mutation>
+    );
+  }
 
   render() {
     return (
@@ -132,165 +234,10 @@ export default class Bet extends Component {
           </Body>
         </Header>
 
-        <Content>
-
-          <H1 style={{alignSelf: "center"}}>Hora de Apostar!!!</H1>
-          <Grid>
-            <Col style={{ marginTop: 15, height: 90 }}>
-              <Text style={{alignSelf: "center"}}>
-                {this.getNameTeam(this.state.match.team_local_id)}
-              </Text>
-              <Item rounded style={{alignSelf: "center"}}>
-                <Input
-                  keyboardType = 'numeric'
-                  value={this.state.goalsLocal}
-                  onChangeText={(goalsLocal) => this.setGoalsLocal(goalsLocal)}
-                />
-              </Item>
-            </Col>
-
-            <Col style={{ marginTop: 15, height: 90 }}>
-              <Text style={{alignSelf: "center"}}>
-                {this.getNameTeam(this.state.match.team_visitor_id)}
-              </Text>
-              <Item rounded style={{alignSelf: "center"}}>
-                <Input
-                  keyboardType = 'numeric'
-                  value={this.state.goalsVisitor}
-                  onChangeText={(goalsVisitor) => this.setGoalsVisitor(goalsVisitor)}
-                />
-              </Item>
-            </Col>
-          </Grid>
-          <Text style={{alignSelf: "center"}}>Cantidad de Apuesta</Text>
-          <Item rounded style={{width: 80, alignSelf: "center"}}>
-            <Input
-              keyboardType = 'numeric'
-              value={this.state.amount}
-              onChangeText={(amount) => this.setAmount(amount)}
-            />
-          </Item>
-
-          <Grid>
-            <Col style={{ marginTop: 25 }}>
-              <Text style={{alignSelf: "center"}}>Pozo</Text>
-              <Item rounded>
-                <Input disabled value={this.state.well} />
-              </Item>
-
-              <Text style={{alignSelf: "center"}}>Numero de Apuestas</Text>
-              <Item rounded>
-                <Input disabled value={this.state.bets} />
-              </Item>
-            </Col>
-
-            <Col style={{ marginTop: 25 }}>
-              <Text style={{alignSelf: "center"}}>Posible Ganancia</Text>
-              <Item rounded>
-                <Input disabled value={this.state.toWin} />
-              </Item>
-
-              <Text style={{alignSelf: "center"}}>Mismo marcador</Text>
-              <Item rounded>
-                <Input disabled value={this.state.results} />
-              </Item>
-            </Col>
-          </Grid>
-          <Button onPress={this.sendResult} rounded danger style={{ marginTop: 25, alignSelf: "center" }}>
-            <Text>Apostar</Text>
-          </Button>
-
-        </Content>
+        {this.bodyBet()}
 
         <Footer />
       </Container>
     );
   }
 };
-//
-// class BetAux extends Component {
-//
-//
-//   render() {
-//     return (
-//       <Container>
-//         <Header style={{backgroundColor: "red"}}>
-//           <Left>
-//             <Button transparent onPress={() => this.props.navigation.navigate("DrawerOpen")}>
-//               <Icon name='menu' />
-//             </Button>
-//           </Left>
-//           <Body>
-//             <Title>
-//               Apuesta MUNdial
-//             </Title>
-//           </Body>
-//
-//         </Header>
-//
-//
-//           <Content>
-//             <H2 style={{alignSelf: "center"}}>Bet Time!!</H2>
-//             <Grid>
-//               <Col style={{ marginTop: 15, height: 90 }}>
-//                 <Text style={{alignSelf: "center"}}>Local</Text>
-//                 <Item rounded>
-//                   <Input placeholder='Local' keyboardType = 'numeric'/>
-//                 </Item>
-//               </Col>
-//
-//               <Col style={{ marginTop: 15, height: 90 }}>
-//                 <Text style={{alignSelf: "center"}}>Visit</Text>
-//                 <Item rounded>
-//                   <Input placeholder='Visit' keyboardType = 'numeric'/>
-//                 </Item>
-//               </Col>
-//             </Grid>
-//             <Text style={{alignSelf: "center"}}>Amount of Bet</Text>
-//             <Item rounded style={{width: 80 ,alignSelf: "center"}}>
-//               <Input placeholder='Amount' keyboardType = 'numeric'/>
-//             </Item>
-//             <Grid>
-//               <Col style={{ marginTop: 25 }}>
-//                 <Text style={{alignSelf: "center"}}>Pozo</Text>
-//                 <Item rounded>
-//                   <Input disabled placeholder='well' />
-//                 </Item>
-//
-//                 <Text style={{alignSelf: "center"}}>$ to win</Text>
-//                 <Item rounded>
-//                   <Input disabled placeholder='$ to win' />
-//                 </Item>
-//               </Col>
-//
-//               <Col style={{ marginTop: 25 }}>
-//                 <Text style={{alignSelf: "center"}}># bets</Text>
-//                 <Item rounded>
-//                   <Input disabled placeholder='# bets' />
-//                 </Item>
-//
-//                 <Text style={{alignSelf: "center"}}># Results</Text>
-//                 <Item rounded>
-//                   <Input disabled placeholder='# Results' />
-//                 </Item>
-//               </Col>
-//             </Grid>
-//             <Button rounded danger style={{ marginTop: 25, alignSelf: "center" }}>
-//               <Text>to bet!</Text>
-//             </Button>
-//           </Content>
-//
-//
-//         <Footer>
-//           <FooterTab style={{backgroundColor: "red"}}>
-//
-//             <Button iconLeft transparent primary>
-//               <Icon name='beer' />
-//             </Button>
-//
-//           </FooterTab>
-//         </Footer>
-//       </Container>
-//     );
-//   }
-// }
