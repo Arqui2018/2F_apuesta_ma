@@ -18,13 +18,14 @@ import {
 } from 'native-base';
 import { Image, View } from 'react-native';
 import Footer from '../components/Footer.js';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 export default class index extends Component {
 
   render(){
     return (
       <Container>
-        <Header style={{backgroundColor: "red"}}>
+        <Header style={{backgroundColor: "red", paddingTop: getStatusBarHeight(), height: 45 + getStatusBarHeight()}}>
           <Left>
             <Button transparent onPress={() => this.props.navigation.navigate("DrawerOpen")}>
               <Icon name='menu' />

@@ -6,6 +6,7 @@ import gql from 'graphql-tag';
 import { Mutation, Query } from "react-apollo";
 import { client } from '../../App';
 import { Alert } from 'react-native';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 export default class Bet extends Component {
 
@@ -169,7 +170,7 @@ export default class Bet extends Component {
             </Item>
 
             <Grid>
-              <Col style={{ marginTop: 25 }}>
+              <Col style={{ marginTop: 23 }}>
                 <Text style={{alignSelf: "center"}}>Pozo</Text>
                 <Item rounded>
                   <Input disabled value={this.state.well} />
@@ -181,7 +182,7 @@ export default class Bet extends Component {
                 </Item>
               </Col>
 
-              <Col style={{ marginTop: 25 }}>
+              <Col style={{ marginTop: 23 }}>
                 <Text style={{alignSelf: "center"}}>Posible Ganancia</Text>
                 <Item rounded>
                   <Input disabled value={this.state.toWin} />
@@ -207,7 +208,7 @@ export default class Bet extends Component {
               createResult({ variables: { result }});
               Alert.alert(`I'am the fuck lord`);
               // return
-            }} rounded danger style={{ marginTop: 25, alignSelf: "center" }}>
+            }} rounded danger style={{ marginTop: 18, alignSelf: "center" }}>
               <Text>Apostar</Text>
             </Button>
 
@@ -221,7 +222,7 @@ export default class Bet extends Component {
   render() {
     return (
       <Container>
-        <Header style={{ backgroundColor: 'red' }}>
+        <Header style={{backgroundColor: "red", paddingTop: getStatusBarHeight(), height: 45 + getStatusBarHeight()}}>
           <Left>
             <Button transparent onPress={() => this.props.navigation.navigate('MatchesByDay', { day: this.props.navigation.state.params.day })}>
               <Icon name="arrow-back" />
