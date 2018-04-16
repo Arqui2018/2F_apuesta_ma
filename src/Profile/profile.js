@@ -4,6 +4,7 @@ import { Container, Header, Title, Content } from 'native-base';
 import { Button, Body, Icon, Left, Text, Item } from 'native-base';
 import { Input, List, ListItem, Row } from 'native-base';
 import Footer from '../components/Footer.js';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 const imgHead = require("../assets/Ap_mUN.png");
 const datas = [
@@ -33,7 +34,7 @@ export default class Profile extends React.Component{
   render(){
     return (
       <Container>
-        <Header style={{backgroundColor: "red"}}>
+        <Header style={{backgroundColor: "red", paddingTop: getStatusBarHeight(), height: 45 + getStatusBarHeight()}}>
           <Left>
             <Button transparent onPress={() => this.props.navigation.navigate("DrawerOpen")}>
               <Icon name='menu' />
