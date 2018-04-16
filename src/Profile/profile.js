@@ -7,30 +7,27 @@ import { Input, List, ListItem, Row, H1 } from 'native-base';
 import Footer from '../components/Footer.js';
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
+import { client } from '../../App';
 
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
-const imgHead = require("../assets/Ap_mUN.png");
-const datas = [
-  'BRA v GER',
-  'JAP v KOR',
-  'COL v POL',
-  'MEX v ARG',
-];
+// const imgHead = require("../assets/Ap_mUN.png");
+// const datas = [
+//   'BRA v GER',
+//   'JAP v KOR',
+//   'COL v POL',
+//   'MEX v ARG',
+// ];
 
 export default class Profile extends React.Component{
   constructor(props) {
     super(props);
-    this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
-      basic: true,
-      listViewData: datas,
+      allResults: [],
     };
   }
 
   componentWillMount() {
-    const params = this.props.navigation.state.params;
-    this.setState(params);
     client
       .query({
         query: gql`
@@ -48,17 +45,79 @@ export default class Profile extends React.Component{
         }`
       })
       .then(data => {
-        this.setState({ allResults: data.data.allResults });
-        console.log(data.data.allResults);
+        const myBets = [];
+        data.data.allResults.forEach(item => {
+          if (item.user_id === 1)
+            myBets.push(item)
+        });
+        this.setState({ allResults: myBets });
       });
   }
 
 
-  deleteRow(secId, rowId, rowMap) {
-    rowMap[`${secId}${rowId}`].props.closeRow();
-    const newData = [...this.state.listViewData];
-    newData.splice(rowId, 1);
-    this.setState({ listViewData: newData });
+  // deleteRow(secId, rowId, rowMap) {
+  //   rowMap[`${secId}${rowId}`].props.closeRow();
+  //   const newData = [...this.state.listViewData];
+  //   newData.splice(rowId, 1);
+  //   this.setState({ listViewData: newData });
+  // }
+
+  getBets() {
+    // return this.state.allResults.map((item, i) => (
+    //   <ListItem key={i}>
+    //     <Body>
+    //       <Text>{`${item.g_local + ' ' + item.g_visit}`}</Text>
+    //       {/* <Text> {this.getNameTeam(item.g_local)} {` VS `} {this.getNameTeam(item.g_visit)}</Text> */}
+    //     </Body>
+    //   </ListItem>
+    // ));
+
+
+    const GET_RESULTS = gql`
+      {
+        allResults {
+          user_id
+          amount
+          date
+          g_local
+          g_visit
+          winner
+          match_id
+          wallet_id
+        }
+      }
+    `;
+
+    return (
+      <Query query={GET_RESULTS}>
+        {({ loading, error, data }) => {
+          if (loading) return "Loading...";
+          if (error) return `Error! ${error.message}`;
+
+
+          const myBets = [];
+          data.allResults.forEach(item => {
+            if (item.user_id === 1)
+              myBets.push(item);
+          });
+
+          return myBets.map((item, i) =>
+            <ListItem
+              key={i}
+            >
+              <Body>
+                <Text>Hello world!!!</Text>
+              </Body>
+              <Right><Icon name="md-arrow-dropright" /></Right>
+            </ListItem>
+          );
+        }}
+      </Query>
+    );
+  }
+
+  getMatchById() {
+
   }
 
   getNameTeam(idTeam) {
@@ -115,8 +174,8 @@ export default class Profile extends React.Component{
       <Container>
         <Header style={{backgroundColor: "red", paddingTop: getStatusBarHeight(), height: 45 + getStatusBarHeight()}}>
           <Left>
-            <Button transparent onPress={() => this.props.navigation.navigate("DrawerOpen")}>
-              <Icon name='menu' />
+            <Button transparent onPress={() => this.props.navigation.goBack()}>
+              <Icon name="arrow-back" />
             </Button>
           </Left>
           <Body>
@@ -146,7 +205,9 @@ export default class Profile extends React.Component{
           </List>
 
           <H1 style={{ marginTop: 25, alignSelf: "center" }}>Apuestas</H1>
-          
+          <List>
+            {this.getBets()}
+          </List>
 
         </Content>
 
