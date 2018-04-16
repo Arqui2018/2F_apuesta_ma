@@ -19,6 +19,10 @@ import { getStatusBarHeight } from 'react-native-status-bar-height';
 //   'MEX v ARG',
 // ];
 
+function locale(number) {
+  return number.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+}
+
 export default class Profile extends React.Component{
   constructor(props) {
     super(props);
@@ -59,13 +63,13 @@ export default class Profile extends React.Component{
     return this.state.allResults.map((item, i) => (
       <ListItem key={i}>
         <Body>
-          <Text>{this.getMatchById(item.match_id, item.g_local, item.g_visit)}</Text>
+          <Text>{this.getMatchById(item.match_id, item.g_local, item.g_visit, locale(item.amount))}</Text>
         </Body>
       </ListItem>
     ));
   }
 
-  getMatchById(idMatch, local, visitor) {
+  getMatchById(idMatch, local, visitor, amount) {
     const GET_MATCH = gql`
       query matchById($idMatch: Int!) {
         matchById(id: $idMatch) {
@@ -86,7 +90,11 @@ export default class Profile extends React.Component{
 
           data = data.matchById;
 
-          return <Text>{this.getNameTeam(data.team_local_id)} {` ${local} - ${visitor} `} {this.getNameTeam(data.team_visitor_id)}</Text>;
+          return (
+            <Text>
+              {this.getNameTeam(data.team_local_id)} {` ${local} - ${visitor} `} {this.getNameTeam(data.team_visitor_id)}
+              <Text>{`\t${amount}`}</Text>
+          </Text>);
         }}
       </Query>
     );
@@ -135,7 +143,7 @@ export default class Profile extends React.Component{
           if (error)
             return `Error!: ${error}`;
 
-          return data.walletById.balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+          return locale(data.walletById.balance);
         }}
       </Query>
     );
