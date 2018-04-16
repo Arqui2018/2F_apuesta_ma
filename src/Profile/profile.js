@@ -26,6 +26,32 @@ export default class Profile extends React.Component{
     };
   }
 
+  componentWillMount() {
+    const params = this.props.navigation.state.params;
+    this.setState(params);
+    client
+      .query({
+        query: gql`
+        {
+          allResults {
+            user_id
+            amount
+            date
+            g_local
+            g_visit
+            winner
+            match_id
+            wallet_id
+          }
+        }`
+      })
+      .then(data => {
+        this.setState({ allResults: data.data.allResults });
+        console.log(data.data.allResults);
+      });
+  }
+
+
   deleteRow(secId, rowId, rowMap) {
     rowMap[`${secId}${rowId}`].props.closeRow();
     const newData = [...this.state.listViewData];
@@ -52,43 +78,6 @@ export default class Profile extends React.Component{
             return `Error!: ${error}`;
 
           return data.teamById.name.toString();
-        }}
-      </Query>
-    );
-  }
-
-  getBets() {
-    const GET_RESULTS = gql`
-      {
-        allResults {
-          user_id
-          amount
-          date
-          g_local
-          g_visit
-          winner
-          match_id
-          wallet_id
-        }
-      }
-    `;
-
-    return (
-      <Query query={GET_RESULTS}>
-        {({ loading, error, data }) => {
-
-          if (loading)
-            return 'Loading';
-          if (error)
-            return `Error!: ${error}`;
-          console.log(data);
-          return (
-            <ListItem>
-              <Body>
-                <Text>I am the best</Text>
-              </Body>
-            </ListItem>
-          );
         }}
       </Query>
     );
@@ -138,26 +127,24 @@ export default class Profile extends React.Component{
 
         <Content padder>
 
-        <H1 style={{ marginTop: 10, alignSelf: "center" }}>Información personal</H1>
-        <List>
-          <ListItem>
-            <Icon active name="contact" />
-            <Body>
-              <Text>Example</Text>
-            </Body>
-          </ListItem>
-          <ListItem>
-            <Icon active name="logo-usd" />
-            <Body>
-              <Text>{this.getBalance()}</Text>
-            </Body>
-          </ListItem>
-        </List>
+          <H1 style={{ marginTop: 10, alignSelf: "center" }}>Información personal</H1>
+          <List>
+            <ListItem>
+              <Icon active name="contact" />
+              <Body>
+                <Text>Example</Text>
+              </Body>
+            </ListItem>
+            <ListItem>
+              <Icon active name="logo-usd" />
+              <Body>
+                <Text>{this.getBalance()}</Text>
+              </Body>
+            </ListItem>
+          </List>
 
-        <H1 style={{ marginTop: 25, alignSelf: "center" }}>Apuestas</H1>
-        <List>
-          {/* {this.getBets()} */}
-        </List>
+          <H1 style={{ marginTop: 25, alignSelf: "center" }}>Apuestas</H1>
+          
 
         </Content>
 

@@ -47,7 +47,6 @@ export default class Bet extends Component {
       .then(data => {
         this.setState({ allResults: data.data.allResults });
       });
-    // console.log(client);
   }
 
   getNameTeam(idTeam) {
