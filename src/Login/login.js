@@ -6,13 +6,15 @@ import { Input, Label } from 'native-base';
 import Footer from '../components/Footer.js';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
-const imgHead = require("../assets/Ap_mUN.png");
-
 export default class Login extends React.Component{
   render(){
     return (
       <Container>
+<<<<<<< HEAD
         <Header style={{backgroundColor: "red", paddingTop: getStatusBarHeight(), height: 45 + getStatusBarHeight()}}>
+=======
+        <Header style={{ backgroundColor: "red" }}>
+>>>>>>> 1884437ee84b1a0481238e6df61840ef1b23f7b0
           <Left>
             <Button transparent onPress={() => this.props.navigation.goBack()}>
               <Icon name="arrow-back" />

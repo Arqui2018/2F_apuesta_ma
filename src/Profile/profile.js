@@ -2,9 +2,11 @@ import React from 'react';
 import { ListView } from 'react-native';
 import { Container, Header, Title, Content } from 'native-base';
 import { Button, Body, Icon, Left, Text, Item } from 'native-base';
-import { Input, List, ListItem, Row } from 'native-base';
+import { Input, List, ListItem, Row, H1 } from 'native-base';
+
 import Footer from '../components/Footer.js';
-import { getStatusBarHeight } from 'react-native-status-bar-height';
+import gql from "graphql-tag";
+import { Query } from "react-apollo";
 
 const imgHead = require("../assets/Ap_mUN.png");
 const datas = [
@@ -31,6 +33,92 @@ export default class Profile extends React.Component{
     this.setState({ listViewData: newData });
   }
 
+  getNameTeam(idTeam) {
+    const GET_NAME_TEAM = gql`
+      query teamById($idTeam: Int!) {
+        teamById(id: $idTeam) {
+          name
+        }
+      }
+    `;
+
+    return (
+      <Query query={GET_NAME_TEAM} variables={{ idTeam }}>
+        {({ loading, error, data }) => {
+
+          if (loading)
+            return 'Loading...';
+          if (error)
+            return `Error!: ${error}`;
+
+          return data.teamById.name.toString();
+        }}
+      </Query>
+    );
+  }
+
+  getBets() {
+    const GET_RESULTS = gql`
+      {
+        allResults {
+          user_id
+          amount
+          date
+          g_local
+          g_visit
+          winner
+          match_id
+          wallet_id
+        }
+      }
+    `;
+
+    return (
+      <Query query={GET_RESULTS}>
+        {({ loading, error, data }) => {
+
+          if (loading)
+            return 'Loading';
+          if (error)
+            return `Error!: ${error}`;
+          console.log(data);
+          return (
+            <ListItem>
+              <Body>
+                <Text>I am the best</Text>
+              </Body>
+            </ListItem>
+          );
+        }}
+      </Query>
+    );
+  }
+
+  getBalance() {
+
+    const GET_BALANCE = gql`
+      query walletById($id: Int!) {
+        walletById(id: $id) {
+          balance
+        }
+      }
+    `;
+
+    return (
+      <Query query={GET_BALANCE} variables={{id: 1}}>
+        {({ loading, error, data }) => {
+
+          if (loading)
+            return 'Loading';
+          if (error)
+            return `Error!: ${error}`;
+
+          return data.walletById.balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+        }}
+      </Query>
+    );
+  }
+
   render(){
     return (
       <Container>
@@ -48,39 +136,30 @@ export default class Profile extends React.Component{
 
         </Header>
 
-        <Container>
-          <Content padder>
+        <Content padder>
 
-            <Item disabled>
-              <Input disabled placeholder='Name User'/>
-              <Icon name='information-circle' />
-            </Item>
+        <H1 style={{ marginTop: 10, alignSelf: "center" }}>Información personal</H1>
+        <List>
+          <ListItem>
+            <Icon active name="contact" />
+            <Body>
+              <Text>Example</Text>
+            </Body>
+          </ListItem>
+          <ListItem>
+            <Icon active name="logo-usd" />
+            <Body>
+              <Text>{this.getBalance()}</Text>
+            </Body>
+          </ListItem>
+        </List>
 
-            <Item disabled>
-              <Input disabled placeholder='Balance'/>
-              <Icon name='information-circle' />
-            </Item>
+        <H1 style={{ marginTop: 25, alignSelf: "center" }}>Apuestas</H1>
+        <List>
+          {/* {this.getBets()} */}
+        </List>
 
-            <Text style={{ marginTop: 25, alignSelf: "center" }}>APUESTAS</Text>
-            <List
-              dataSource={this.ds.cloneWithRows(this.state.listViewData)}
-              renderRow={data =>
-                <ListItem>
-                  <Text> {data} </Text>
-                </ListItem>}
-              renderLeftHiddenRow={data =>
-                <Button full onPress={() => alert(data)}>
-                  <Icon active name="information-circle" />
-                </Button>}
-              renderRightHiddenRow={(data, secId, rowId, rowMap) =>
-                <Button full danger onPress={_ => this.deleteRow(secId, rowId, rowMap)}>
-                  <Icon active name="trash" />
-                </Button>}
-              leftOpenValue={75}
-              rightOpenValue={-75}
-            />
-          </Content>
-        </Container>
+        </Content>
 
         <Footer />
 
