@@ -8,6 +8,8 @@ import Footer from '../components/Footer.js';
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+
 const imgHead = require("../assets/Ap_mUN.png");
 const datas = [
   'BRA v GER',
