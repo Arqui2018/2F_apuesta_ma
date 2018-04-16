@@ -5,13 +5,11 @@ import { Button, Left, Right, Body, Icon, Text, Form, Item } from 'native-base';
 import { Input, Label } from 'native-base';
 import Footer from '../components/Footer.js';
 
-const imgHead = require("../assets/Ap_mUN.png");
-
 export default class Login extends React.Component{
   render(){
     return (
       <Container>
-        <Header style={{backgroundColor: "red"}}>
+        <Header style={{ backgroundColor: "red" }}>
           <Left>
             <Button transparent onPress={() => this.props.navigation.goBack()}>
               <Icon name="arrow-back" />

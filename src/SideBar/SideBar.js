@@ -1,7 +1,8 @@
 import React from "react";
 import { AppRegistry, Image, StatusBar } from "react-native";
 import { Button, Text, Container, List, Icon } from "native-base";
-import { ListItem, Content, Left, Body, Right } from "native-base";
+import { ListItem, Content, Left, Body, Right, Row } from "native-base";
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 const routes = { Home: 'Inicio', Login: 'Iniciar sesión', Profile: 'Perfil', MatchesByDate: 'Partidos'};
 
@@ -10,6 +11,8 @@ export default class SideBar extends React.Component {
     return (
       <Container>
         <Content>
+        <Row style={{backgroundColor: "red", height: getStatusBarHeight()}}>
+        </Row>
           <Image
             source={{
               uri:
@@ -18,14 +21,12 @@ export default class SideBar extends React.Component {
             style={{
               height: 120,
               width: "100%",
-              alignSelf: "stretch",
-              position: "absolute"
+              alignSelf: "stretch"
             }}
           />
-
           <List
             dataArray={Object.keys(routes)}
-            contentContainerStyle={{ marginTop: 120 }}
+            contentContainerStyle={{ marginTop: getStatusBarHeight() }}
             renderRow={data => {
               return (
                 <ListItem icon

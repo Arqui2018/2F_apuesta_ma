@@ -23,6 +23,7 @@ import {
 import Footer from '../components/Footer.js';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 export default class MatchesByDay extends Component {
 
@@ -99,7 +100,7 @@ export default class MatchesByDay extends Component {
   render() {
     return (
       <Container>
-        <Header style={{ backgroundColor: 'red' }}>
+        <Header style={{backgroundColor: "red", paddingTop: getStatusBarHeight(), height: 45 + getStatusBarHeight()}}>
           <Left>
             <Button transparent onPress={() => this.props.navigation.navigate('MatchesByDate')}>
               <Icon name="arrow-back" />
