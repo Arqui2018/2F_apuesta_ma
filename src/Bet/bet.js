@@ -9,7 +9,6 @@ import { Alert } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 export default class Bet extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -126,94 +125,110 @@ export default class Bet extends Component {
       }
     `;
 
+    const UPDATE_WALLET = gql`
+      mutation updateWallet($wallet: WalletInput!){
+        updateWallet(id: 1, wallet: $wallet) {
+          balance
+        }
+      }
+    `;
+
     return (
       <Mutation mutation={ADD_RESULT}>
         {(createResult, { data }) => (
-          <Content>
+          <Mutation mutation={UPDATE_WALLET}>
+            {updateWallet => (
+              <Content>
 
-            <H1 style={{alignSelf: "center"}}>Hora de Apostar!!!</H1>
-            <Grid>
-              <Col style={{ marginTop: 15, height: 90 }}>
-                <Text style={{alignSelf: "center"}}>
-                  {this.getNameTeam(this.state.match.team_local_id)}
-                </Text>
-                <Item rounded style={{alignSelf: "center"}}>
+                <H1 style={{ alignSelf: 'center' }}>Hora de Apostar!!!</H1>
+                <Grid>
+                  <Col style={{ marginTop: 15, height: 90 }}>
+                    <Text style={{ alignSelf: 'center' }}>
+                      {this.getNameTeam(this.state.match.team_local_id)}
+                    </Text>
+                    <Item rounded style={{ alignSelf: 'center' }}>
+                      <Input
+                        keyboardType = 'numeric'
+                        value={this.state.goalsLocal}
+                        onChangeText={(goalsLocal) => this.setGoalsLocal(goalsLocal)}
+                      />
+                    </Item>
+                  </Col>
+
+                  <Col style={{ marginTop: 15, height: 90 }}>
+                    <Text style={{ alignSelf: 'center' }}>
+                      {this.getNameTeam(this.state.match.team_visitor_id)}
+                    </Text>
+                    <Item rounded style={{ alignSelf: 'center' }}>
+                      <Input
+                        keyboardType = 'numeric'
+                        value={this.state.goalsVisitor}
+                        onChangeText={(goalsVisitor) => this.setGoalsVisitor(goalsVisitor)}
+                      />
+                    </Item>
+                  </Col>
+                </Grid>
+                <Text style={{ alignSelf: 'center' }}>Cantidad de Apuesta</Text>
+                <Item rounded style={{width: 80, alignSelf: "center"}}>
                   <Input
-                    keyboardType = 'numeric'
-                    value={this.state.goalsLocal}
-                    onChangeText={(goalsLocal) => this.setGoalsLocal(goalsLocal)}
+                    keyboardType='numeric'
+                    value={this.state.amount}
+                    onChangeText={(amount) => this.setAmount(amount)}
                   />
                 </Item>
-              </Col>
 
-              <Col style={{ marginTop: 15, height: 90 }}>
-                <Text style={{alignSelf: "center"}}>
-                  {this.getNameTeam(this.state.match.team_visitor_id)}
-                </Text>
-                <Item rounded style={{alignSelf: "center"}}>
-                  <Input
-                    keyboardType = 'numeric'
-                    value={this.state.goalsVisitor}
-                    onChangeText={(goalsVisitor) => this.setGoalsVisitor(goalsVisitor)}
-                  />
-                </Item>
-              </Col>
-            </Grid>
-            <Text style={{alignSelf: "center"}}>Cantidad de Apuesta</Text>
-            <Item rounded style={{width: 80, alignSelf: "center"}}>
-              <Input
-                keyboardType = 'numeric'
-                value={this.state.amount}
-                onChangeText={(amount) => this.setAmount(amount)}
-              />
-            </Item>
+                <Grid>
+                  <Col style={{ marginTop: 23 }}>
+                    <Text style={{ alignSelf: 'center' }}>Pozo</Text>
+                    <Item rounded>
+                      <Input disabled value={this.state.well} />
+                    </Item>
 
-            <Grid>
-              <Col style={{ marginTop: 23 }}>
-                <Text style={{alignSelf: "center"}}>Pozo</Text>
-                <Item rounded>
-                  <Input disabled value={this.state.well} />
-                </Item>
+                    <Text style={{ alignSelf: 'center' }}>Numero de Apuestas</Text>
+                    <Item rounded>
+                      <Input disabled value={this.state.bets} />
+                    </Item>
+                  </Col>
 
-                <Text style={{alignSelf: "center"}}>Numero de Apuestas</Text>
-                <Item rounded>
-                  <Input disabled value={this.state.bets} />
-                </Item>
-              </Col>
+                  <Col style={{ marginTop: 23 }}>
+                    <Text style={{ alignSelf: 'center' }}>Posible Ganancia</Text>
+                    <Item rounded>
+                      <Input disabled value={this.state.toWin} />
+                    </Item>
 
-              <Col style={{ marginTop: 23 }}>
-                <Text style={{alignSelf: "center"}}>Posible Ganancia</Text>
-                <Item rounded>
-                  <Input disabled value={this.state.toWin} />
-                </Item>
+                    <Text style={{ alignSelf: 'center' }}>Mismo marcador</Text>
+                    <Item rounded>
+                      <Input disabled value={this.state.results} />
+                    </Item>
+                  </Col>
+                </Grid>
+                <Button onPress={() => {
+                  const result = {
+                    user_id: 1,
+                    amount: parseInt(this.state.amount),
+                    g_local: parseInt(this.state.goalsLocal),
+                    g_visit: parseInt(this.state.goalsVisitor),
+                    match_id: parseInt(this.state.match.id),
+                    wallet_id: 6070,
+                  };
+                  const wallet = {
+                    balance: -result.amount,
+                  };
 
-                <Text style={{alignSelf: "center"}}>Mismo marcador</Text>
-                <Item rounded>
-                  <Input disabled value={this.state.results} />
-                </Item>
-              </Col>
-            </Grid>
-            <Button onPress={() => {
-              const result = {
-                user_id: 1,
-                amount: parseInt(this.state.amount),
-                g_local: parseInt(this.state.goalsLocal),
-                g_visit: parseInt(this.state.goalsVisitor),
-                match_id: parseInt(this.state.match.id),
-                wallet_id: 6070,
-              };
+                  updateWallet({ variables: { wallet }});
+                  createResult({ variables: { result }});
+                  Alert.alert('Felicitaciones', 'Apuesta creata Exitosamente');
+                  this.props.navigation.navigate('Home'); // return home
+                }} rounded danger style={{ marginTop: 25, alignSelf: "center" }}>
+                  <Text>Apostar</Text>
+                </Button>
+
+              </Content>
 
 
-              createResult({ variables: { result }});
-              Alert.alert('Felicitaciones', 'Apuesta creata Exitosamente');
-              this.props.navigation.navigate('Home'); // return home
-            }} rounded danger style={{ marginTop: 25, alignSelf: "center" }}>
-              <Text>Apostar</Text>
-            </Button>
-
-          </Content>
-
-      )}
+            )}
+          </Mutation>
+        )}
       </Mutation>
     );
   }
