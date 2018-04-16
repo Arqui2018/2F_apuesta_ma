@@ -8,6 +8,8 @@ import Footer from '../components/Footer.js';
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+
 const imgHead = require("../assets/Ap_mUN.png");
 const datas = [
   'BRA v GER',
@@ -111,7 +113,7 @@ export default class Profile extends React.Component{
   render(){
     return (
       <Container>
-        <Header style={{backgroundColor: "red"}}>
+        <Header style={{backgroundColor: "red", paddingTop: getStatusBarHeight(), height: 45 + getStatusBarHeight()}}>
           <Left>
             <Button transparent onPress={() => this.props.navigation.navigate("DrawerOpen")}>
               <Icon name='menu' />
