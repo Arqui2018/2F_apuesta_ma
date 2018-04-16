@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListView } from 'react-native';
+import { ListView, View } from 'react-native';
 import { Container, Header, Title, Content } from 'native-base';
 import { Button, Body, Icon, Left, Text, Item } from 'native-base';
 import { Input, List, ListItem, Row, H1 } from 'native-base';
@@ -55,69 +55,41 @@ export default class Profile extends React.Component{
   }
 
 
-  // deleteRow(secId, rowId, rowMap) {
-  //   rowMap[`${secId}${rowId}`].props.closeRow();
-  //   const newData = [...this.state.listViewData];
-  //   newData.splice(rowId, 1);
-  //   this.setState({ listViewData: newData });
-  // }
-
   getBets() {
-    // return this.state.allResults.map((item, i) => (
-    //   <ListItem key={i}>
-    //     <Body>
-    //       <Text>{`${item.g_local + ' ' + item.g_visit}`}</Text>
-    //       {/* <Text> {this.getNameTeam(item.g_local)} {` VS `} {this.getNameTeam(item.g_visit)}</Text> */}
-    //     </Body>
-    //   </ListItem>
-    // ));
+    return this.state.allResults.map((item, i) => (
+      <ListItem key={i}>
+        <Body>
+          <Text>{this.getMatchById(item.match_id, item.g_local, item.g_visit)}</Text>
+        </Body>
+      </ListItem>
+    ));
+  }
 
-
-    const GET_RESULTS = gql`
-      {
-        allResults {
-          user_id
-          amount
-          date
-          g_local
-          g_visit
-          winner
-          match_id
-          wallet_id
+  getMatchById(idMatch, local, visitor) {
+    const GET_MATCH = gql`
+      query matchById($idMatch: Int!) {
+        matchById(id: $idMatch) {
+          team_local_id
+          team_visitor_id
         }
       }
     `;
 
     return (
-      <Query query={GET_RESULTS}>
+      <Query query={GET_MATCH} variables={{ idMatch }}>
         {({ loading, error, data }) => {
-          if (loading) return "Loading...";
-          if (error) return `Error! ${error.message}`;
 
+          if (loading)
+            return 'Loading...';
+          if (error)
+            return `Error!: ${error}`;
 
-          const myBets = [];
-          data.allResults.forEach(item => {
-            if (item.user_id === 1)
-              myBets.push(item);
-          });
+          data = data.matchById;
 
-          return myBets.map((item, i) =>
-            <ListItem
-              key={i}
-            >
-              <Body>
-                <Text>Hello world!!!</Text>
-              </Body>
-              <Right><Icon name="md-arrow-dropright" /></Right>
-            </ListItem>
-          );
+          return <Text>{this.getNameTeam(data.team_local_id)} {` ${local} - ${visitor} `} {this.getNameTeam(data.team_visitor_id)}</Text>;
         }}
       </Query>
     );
-  }
-
-  getMatchById() {
-
   }
 
   getNameTeam(idTeam) {
