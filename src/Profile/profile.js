@@ -11,14 +11,6 @@ import { client } from '../../App';
 
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
-// const imgHead = require("../assets/Ap_mUN.png");
-// const datas = [
-//   'BRA v GER',
-//   'JAP v KOR',
-//   'COL v POL',
-//   'MEX v ARG',
-// ];
-
 function locale(number) {
   return number.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 }

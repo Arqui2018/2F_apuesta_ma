@@ -1,12 +1,28 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import { Container, Header, Content, H1, Text, Icon, Left, Body, Title, Button, Item, Input } from "native-base";
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import Footer from '../components/Footer.js';
 import gql from 'graphql-tag';
+import Slider from 'react-native-slider';
 import { Mutation, Query } from "react-apollo";
 import { client } from '../../App';
-import { Alert } from 'react-native';
+import { Alert, View, StyleSheet } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
+
+function locale(number) {
+  return '$' + number.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+}
+
+var styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginLeft: 10,
+    marginRight: 10,
+    alignItems: 'stretch',
+    justifyContent: 'center',
+  },
+});
+
 
 export default class Bet extends Component {
   constructor(props) {
@@ -16,11 +32,11 @@ export default class Bet extends Component {
       match: {},
       goalsLocal: '',
       goalsVisitor: '',
-      amount: '',
-      well: '',
-      bets: '',
-      toWin: '',
-      results: '',
+      amount: 10000,
+      well: '0',
+      bets: '0',
+      toWin: '0',
+      results: '0',
     };
   }
 
@@ -140,7 +156,7 @@ export default class Bet extends Component {
             {updateWallet => (
               <Content>
 
-                <H1 style={{ alignSelf: 'center' }}>Hora de Apostar!!!</H1>
+                <H1 style={{ marginTop: 10, alignSelf: 'center' }}>Hora de Apostar!!!</H1>
                 <Grid>
                   <Col style={{ marginTop: 15, height: 90 }}>
                     <Text style={{ alignSelf: 'center' }}>
@@ -148,7 +164,8 @@ export default class Bet extends Component {
                     </Text>
                     <Item rounded style={{ alignSelf: 'center' }}>
                       <Input
-                        keyboardType = 'numeric'
+                        textAlign='center'
+                        keyboardType="numeric"
                         value={this.state.goalsLocal}
                         onChangeText={(goalsLocal) => this.setGoalsLocal(goalsLocal)}
                       />
@@ -161,6 +178,7 @@ export default class Bet extends Component {
                     </Text>
                     <Item rounded style={{ alignSelf: 'center' }}>
                       <Input
+                        textAlign='center'
                         keyboardType = 'numeric'
                         value={this.state.goalsVisitor}
                         onChangeText={(goalsVisitor) => this.setGoalsVisitor(goalsVisitor)}
@@ -168,37 +186,45 @@ export default class Bet extends Component {
                     </Item>
                   </Col>
                 </Grid>
-                <Text style={{ alignSelf: 'center' }}>Cantidad de Apuesta</Text>
-                <Item rounded style={{width: 80, alignSelf: "center"}}>
-                  <Input
-                    keyboardType='numeric'
-                    value={this.state.amount}
-                    onChangeText={(amount) => this.setAmount(amount)}
-                  />
-                </Item>
+                <Grid>
+                  <Col>
+                    <View style={styles.container}>
+                      <Text style={{ alignSelf: 'center' }}>Cantidad de Apuesta</Text>
+                      <Slider
+                        value={this.state.amount}
+                        onValueChange={amount => this.setAmount(amount)}
+                        minimumValue={10000}
+                        maximumValue={2000000}
+                        step={10000}
+                      />
+                      <Text style={{ alignSelf: 'center' }}>{locale(this.state.amount)}</Text>
+                    </View>
+                  </Col>
+                </Grid>
+
 
                 <Grid>
                   <Col style={{ marginTop: 23 }}>
                     <Text style={{ alignSelf: 'center' }}>Pozo</Text>
                     <Item rounded>
-                      <Input disabled value={this.state.well} />
+                      <Input disabled textAlign="center" value={locale(parseInt(this.state.well, 10))} />
                     </Item>
 
                     <Text style={{ alignSelf: 'center' }}>Numero de Apuestas</Text>
                     <Item rounded>
-                      <Input disabled value={this.state.bets} />
+                      <Input disabled textAlign="center" value={this.state.bets} />
                     </Item>
                   </Col>
 
                   <Col style={{ marginTop: 23 }}>
                     <Text style={{ alignSelf: 'center' }}>Posible Ganancia</Text>
                     <Item rounded>
-                      <Input disabled value={this.state.toWin} />
+                      <Input disabled textAlign="center" value={locale(parseInt(this.state.toWin, 10))} />
                     </Item>
 
                     <Text style={{ alignSelf: 'center' }}>Mismo marcador</Text>
                     <Item rounded>
-                      <Input disabled value={this.state.results} />
+                      <Input disabled textAlign="center" value={this.state.results} />
                     </Item>
                   </Col>
                 </Grid>

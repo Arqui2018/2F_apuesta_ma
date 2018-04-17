@@ -26,6 +26,7 @@ export default class index extends Component {
     return (
       <Container>
         <Header style={{backgroundColor: "red", paddingTop: getStatusBarHeight(), height: 45 + getStatusBarHeight()}}>
+
           <Left>
             <Button transparent onPress={() => this.props.navigation.navigate("DrawerOpen")}>
               <Icon name='menu' />
