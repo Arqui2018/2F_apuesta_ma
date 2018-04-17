@@ -34,9 +34,9 @@ export default class Bet extends Component {
       goalsVisitor: '',
       amount: 10000,
       well: '0',
-      bets: '0',
+      bets: 0,
       toWin: '0',
-      results: '0',
+      results: 0,
     };
   }
 
@@ -99,35 +99,45 @@ export default class Bet extends Component {
   }
 
   async setAmount(amount) {
-    // min 50 max 1 millon
     await this.setState({ amount });
     this.calculateStadistics();
   }
 
   calculateStadistics() {
-    if (this.state.goalsLocal.length && this.state.goalsVisitor.length && this.state.amount) {
-      var auxWell = 0;
-      var auxWellDif = 0;
-      var auxBets = 0;
-      var auxResults = 0;
-      this.state.allResults.forEach(item => {
-        if (item.match_id == this.state.match.id) {
-          auxWell += item.amount;
-          auxBets++;
-        }
-        if (item.g_local == parseInt(this.state.goalsLocal) && item.g_visit == parseInt(this.state.goalsVisitor)) {
-          auxResults++;
-        }
-        else {
-          if (item.match_id == this.state.match.id)
-            auxWellDif += item.amount;
-        }
-      });
+    if (this.state.goalsLocal && this.state.goalsVisitor) {
 
-      auxWell = parseInt((auxWell + parseInt(this.state.amount)) * 0.95);
-      this.setState({well: String(auxWell), bets: String(auxBets), results: String(auxResults)});
-      var percentWell = ((parseInt(this.state.amount) * 95) / auxWell) / 100;
-      this.setState({toWin: String(parseInt(percentWell * auxWellDif + (parseInt(this.state.amount) * 0.95)))});
+      let count = 0;
+      let betWithMatch = 0;
+      let pool = 0;
+      let sum = parseInt(this.state.amount, 10);
+      const goalsLocal = parseInt(this.state.goalsLocal, 10);
+      const goalsVisitor = parseInt(this.state.goalsVisitor, 10);
+      const results = this.state.allResults;
+      const amount = parseInt(this.state.amount, 10);
+
+
+      for (const bet of results) {
+        if (this.state.match.id === bet.match_id) {
+          betWithMatch++;
+          if (bet.g_local === goalsLocal && bet.g_visit === goalsVisitor) {
+            sum += bet.amount;
+            count++;
+          } else {
+            pool += bet.amount;
+          }
+        }
+      }
+
+      const commission = amount / sum;
+      const ourWell = (sum + pool) * 0.9;
+      pool *= 0.9; // 10% to the house
+      const toWin = parseInt(pool * commission + parseInt(this.state.amount * 0.9));
+      this.setState({
+        well: ourWell,
+        results: count,
+        bets: betWithMatch,
+        toWin: toWin,
+      });
     }
   }
 
@@ -167,7 +177,7 @@ export default class Bet extends Component {
                         textAlign="center"
                         keyboardType="numeric"
                         value={this.state.goalsLocal}
-                        onChangeText={(goalsLocal) => this.setGoalsLocal(goalsLocal)}
+                        onChangeText={goalsLocal => this.setGoalsLocal(goalsLocal)}
                       />
                     </Item>
                   </Col>
@@ -181,7 +191,7 @@ export default class Bet extends Component {
                         textAlign="center"
                         keyboardType="numeric"
                         value={this.state.goalsVisitor}
-                        onChangeText={(goalsVisitor) => this.setGoalsVisitor(goalsVisitor)}
+                        onChangeText={goalsVisitor => this.setGoalsVisitor(goalsVisitor)}
                       />
                     </Item>
                   </Col>
@@ -212,7 +222,7 @@ export default class Bet extends Component {
 
                     <Text style={{ alignSelf: 'center' }}>Numero de Apuestas</Text>
                     <Item rounded>
-                      <Input disabled textAlign="center" value={this.state.bets} />
+                      <Input disabled textAlign="center" value={String(this.state.bets)} />
                     </Item>
                   </Col>
 
@@ -224,7 +234,7 @@ export default class Bet extends Component {
 
                     <Text style={{ alignSelf: 'center' }}>Mismo marcador</Text>
                     <Item rounded>
-                      <Input disabled textAlign="center" value={this.state.results} />
+                      <Input disabled textAlign="center" value={String(this.state.results)} />
                     </Item>
                   </Col>
                 </Grid>
@@ -262,7 +272,7 @@ export default class Bet extends Component {
   render() {
     return (
       <Container>
-        <Header style={{backgroundColor: "red", paddingTop: getStatusBarHeight(), height: 45 + getStatusBarHeight()}}>
+        <Header style={{ backgroundColor: 'red', paddingTop: getStatusBarHeight(), height: 45 + getStatusBarHeight() }}>
           <Left>
             <Button transparent onPress={() => this.props.navigation.navigate('MatchesByDay', { day: this.props.navigation.state.params.day })}>
               <Icon name="arrow-back" />

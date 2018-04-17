@@ -1,31 +1,21 @@
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 import React, { Component } from 'react';
 import {
-  ActionSheet,
   Body,
   Button,
   Container,
   Content,
   Header,
   H1,
-  H2,
   Icon,
-  Item,
-  Input,
   Left,
   List,
   ListItem,
-  Root,
   Right,
-  Spinner,
   Text,
   Title
 } from 'native-base';
-import { Query, Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
-import { Alert, View } from 'react-native';
-import { Col, Row, Grid } from 'react-native-easy-grid';
 import Footer from '../components/Footer.js';
-import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 export default class MatchesByDate extends Component {
 
