@@ -251,10 +251,22 @@ export default class Bet extends Component {
                     balance: -result.amount,
                   };
 
-                  updateWallet({ variables: { wallet }});
-                  createResult({ variables: { result }});
-                  Alert.alert('Felicitaciones', 'Apuesta creata Exitosamente');
-                  this.props.navigation.navigate('Home'); // return home
+
+                  Alert.alert(
+                    '¿Esta seguro que sea apostar a este partido?',
+                    `El valor de la apuesta es de ${locale(this.state.amount)}`,
+                    [
+                      {text: 'Cancelar', onPress: () => {}, style: 'cancel'},
+                      {text: 'Aceptar', onPress: () => {
+                        updateWallet({ variables: { wallet }});
+                        createResult({ variables: { result }});
+                        Alert.alert('Felicitaciones', 'Apuesta creata Exitosamente');
+                        this.props.navigation.navigate('Home'); // return home
+                      }},
+                      { cancelable: false }
+                    ]
+                  );
+
                 }} rounded danger style={{ marginTop: 25, alignSelf: "center" }}>
                   <Text>Apostar</Text>
                 </Button>
