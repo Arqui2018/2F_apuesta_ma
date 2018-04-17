@@ -89,18 +89,18 @@ export default class Bet extends Component {
   }
 
   async setGoalsLocal(goalsLocal) {
-    await this.setState({goalsLocal});
+    await this.setState({ goalsLocal });
     this.calculateStadistics();
   }
 
   async setGoalsVisitor(goalsVisitor) {
-    await this.setState({goalsVisitor});
+    await this.setState({ goalsVisitor });
     this.calculateStadistics();
   }
 
   async setAmount(amount) {
     // min 50 max 1 millon
-    await this.setState({amount});
+    await this.setState({ amount });
     this.calculateStadistics();
   }
 
@@ -164,7 +164,7 @@ export default class Bet extends Component {
                     </Text>
                     <Item rounded style={{ alignSelf: 'center' }}>
                       <Input
-                        textAlign='center'
+                        textAlign="center"
                         keyboardType="numeric"
                         value={this.state.goalsLocal}
                         onChangeText={(goalsLocal) => this.setGoalsLocal(goalsLocal)}
@@ -178,8 +178,8 @@ export default class Bet extends Component {
                     </Text>
                     <Item rounded style={{ alignSelf: 'center' }}>
                       <Input
-                        textAlign='center'
-                        keyboardType = 'numeric'
+                        textAlign="center"
+                        keyboardType="numeric"
                         value={this.state.goalsVisitor}
                         onChangeText={(goalsVisitor) => this.setGoalsVisitor(goalsVisitor)}
                       />
