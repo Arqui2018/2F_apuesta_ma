@@ -117,7 +117,6 @@ export default class MatchesByDay extends Component {
 
         <Footer />
       </Container>
-
     );
   }
 }

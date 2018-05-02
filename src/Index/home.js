@@ -8,6 +8,7 @@ import BetScreen from "../Bet/bet.js";
 import SideBar from "../SideBar/SideBar.js";
 import { DrawerNavigator } from "react-navigation";
 
+
 const HomeRouter = DrawerNavigator(
   {
     Home: { screen: IndexScreen },
@@ -21,4 +22,5 @@ const HomeRouter = DrawerNavigator(
     contentComponent: props => <SideBar {...props} />
   }
 );
+
 export default HomeRouter;
