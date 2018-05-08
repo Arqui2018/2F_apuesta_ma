@@ -1,5 +1,12 @@
 {
   "expo": {
-    "sdkVersion": "25.0.0"
+    "sdkVersion": "25.0.0",
+    "name": "Apuesta Mundial",
+    "icon": "./src/assets/icon.png",
+    "version": "1.0.0",
+    "slug": "my-app-slug",
+    "android": {
+      "package": "com.apuesta.mundial"
+    }
   }
 }
