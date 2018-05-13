@@ -7,11 +7,13 @@ import MatchesByDayScreen from '../Matches/matchesByDay';
 import BetScreen from '../Bet/bet';
 import LogOutScreen from '../LogOut/index';
 import SideBar from '../SideBar/SideBar';
+import MyBetsScreen from '../MyBets/index';
 
 const AppStack = DrawerNavigator(
   {
     Home: { screen: IndexScreen },
     Profile: { screen: ProfileScreen },
+    MyBets: { screen: MyBetsScreen },
     MatchesByDate: { screen: MatchesByDateScreen },
     MatchesByDay: { screen: MatchesByDayScreen },
     Bet: { screen: BetScreen },

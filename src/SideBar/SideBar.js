@@ -6,7 +6,8 @@ import { getStatusBarHeight } from 'react-native-status-bar-height';
 const routes = {
   Home: 'Inicio',
   Profile: 'Perfil',
-  MatchesByDate: 'Partidos',
+  MyBets: 'Mis Apuestas',
+  MatchesByDate: 'Apostar',
   LogOut: 'Cerrar Sesión',
 };
 

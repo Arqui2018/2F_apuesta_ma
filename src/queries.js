@@ -58,3 +58,28 @@ export const WALLET_BY_ID = gql`
     }
   }
 `;
+
+// match_ms
+
+export const TEAM_BY_ID = gql`
+  query teamById($id: Int!) {
+    teamById(id: $id) {
+      id
+      name
+    }
+  }
+`;
+
+
+export const MATCH_BY_ID = gql`
+  query matchById($id: Int!) {
+    matchById(id: $id) {
+      id
+      team_local_id
+      team_visitor_id
+      goals_local
+      goals_visitor
+      date
+    }
+  }
+`;

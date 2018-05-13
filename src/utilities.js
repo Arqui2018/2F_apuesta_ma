@@ -1,5 +1,5 @@
 import { AsyncStorage } from 'react-native';
-import { SESSION_BY_TOKEN, WALLET_BY_ID } from './queries';
+import { SESSION_BY_TOKEN, WALLET_BY_ID, TEAM_BY_ID } from './queries';
 import { clientRequest } from '../App';
 
 export async function userData() {
@@ -21,4 +21,13 @@ export async function userData() {
 
 export function locale(number) {
   return number.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+}
+
+export async function nameTeam(id) {
+  try {
+    const { teamById } = await clientRequest.request(TEAM_BY_ID, { id });
+    return teamById.name;
+  } catch (err) {
+    return err;
+  }
 }

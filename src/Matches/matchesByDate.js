@@ -1,20 +1,17 @@
-import { getStatusBarHeight } from 'react-native-status-bar-height';
 import React, { Component } from 'react';
 import {
   Body,
-  Button,
   Container,
   Content,
-  Header,
   H1,
   Icon,
-  Left,
   List,
   ListItem,
   Right,
-  Text,
-  Title
+  Text
 } from 'native-base';
+
+import Header from '../components/header';
 import Footer from '../components/footer';
 
 export default class MatchesByDate extends Component {
@@ -26,7 +23,7 @@ export default class MatchesByDate extends Component {
       days.push(
         <ListItem
           key={i}
-          onPress={() => this.props.navigation.navigate('MatchesByDay', {day: i})}
+          onPress={() => this.props.navigation.navigate('MatchesByDay', { day: i })}
         >
           <Body>
             <Text>{`${week[(i - 14) % 7]} ${i} de Junio`}</Text>
@@ -41,21 +38,9 @@ export default class MatchesByDate extends Component {
   render() {
     return (
       <Container>
+        <Header nameIcon="arrow-back" redirect={() => this.props.navigation.goBack()} />
 
-        <Header style={{ backgroundColor: 'red', paddingTop: getStatusBarHeight(), height: 45 + getStatusBarHeight()}}>
-          <Left>
-            <Button transparent onPress={() => this.props.navigation.goBack()}>
-              <Icon name="arrow-back" />
-            </Button>
-          </Left>
-          <Body>
-            <Title>
-              Apuesta mUNdial
-            </Title>
-          </Body>
-        </Header>
-
-        <Content padder>
+        <Content>
           <H1 style={{ textAlign: 'center' }}>Fecha</H1>
           <List>
             {this.getAllDays()}
