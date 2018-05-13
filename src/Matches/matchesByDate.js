@@ -15,7 +15,7 @@ import {
   Text,
   Title
 } from 'native-base';
-import Footer from '../components/Footer.js';
+import Footer from '../components/footer';
 
 export default class MatchesByDate extends Component {
 

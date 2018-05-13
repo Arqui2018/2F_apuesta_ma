@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Header, Content, H1, Text, Icon, Left, Body, Title, Button, Item, Input } from "native-base";
 import { Col, Row, Grid } from 'react-native-easy-grid';
-import Footer from '../components/Footer.js';
+import Footer from '../components/footer';
 import gql from 'graphql-tag';
 import Slider from 'react-native-slider';
 import { Mutation, Query } from "react-apollo";

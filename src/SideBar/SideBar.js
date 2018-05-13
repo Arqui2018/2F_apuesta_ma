@@ -11,8 +11,8 @@ export default class SideBar extends React.Component {
     return (
       <Container>
         <Content>
-        <Row style={{backgroundColor: "red", height: getStatusBarHeight()}}>
-        </Row>
+          <Row style={{ backgroundColor: "red", height: getStatusBarHeight() }}>
+          </Row>
           <Image
             source={{
               uri:

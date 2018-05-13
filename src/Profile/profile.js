@@ -3,8 +3,9 @@ import { ListView, View } from 'react-native';
 import { Container, Header, Title, Content } from 'native-base';
 import { Button, Body, Icon, Left, Text, Item } from 'native-base';
 import { Input, List, ListItem, Row, H1 } from 'native-base';
+import { AppLoading, Font } from 'expo';
 
-import Footer from '../components/Footer.js';
+import Footer from '../components/footer';
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import { client } from '../../App';

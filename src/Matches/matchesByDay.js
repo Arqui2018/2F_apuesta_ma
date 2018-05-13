@@ -15,7 +15,7 @@ import {
   Text,
   Title
 } from 'native-base';
-import Footer from '../components/Footer.js';
+import Footer from '../components/footer';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import { getStatusBarHeight } from 'react-native-status-bar-height';

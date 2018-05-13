@@ -1,26 +1,15 @@
-import React, { Component } from "react";
-import IndexScreen from "./index.js";
-import LoginScreen from "../Login/login.js";
-import ProfileScreen from "../Profile/profile.js";
-import MatchesByDateScreen from "../Matches/matchesByDate.js";
-import MatchesByDayScreen from "../Matches/matchesByDay.js";
-import BetScreen from "../Bet/bet.js";
-import SideBar from "../SideBar/SideBar.js";
-import { DrawerNavigator } from "react-navigation";
+import { SwitchNavigator } from 'react-navigation';
+import AppStack from './appStack';
+import AuthLoadingScreen from './authLoading';
+import AuthStack from './authStack';
 
-
-const HomeRouter = DrawerNavigator(
+export default SwitchNavigator(
   {
-    Home: { screen: IndexScreen },
-    Login: { screen: LoginScreen },
-    Profile: { screen: ProfileScreen },
-    MatchesByDate: { screen: MatchesByDateScreen },
-    MatchesByDay: { screen: MatchesByDayScreen },
-    Bet: { screen: BetScreen }
+    AuthLoading: AuthLoadingScreen,
+    App: AppStack,
+    Auth: AuthStack,
   },
   {
-    contentComponent: props => <SideBar {...props} />
-  }
+    initialRouteName: 'AuthLoading',
+  },
 );
-
-export default HomeRouter;

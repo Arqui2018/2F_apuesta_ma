@@ -4,6 +4,7 @@ export const CREATE_SESSION = gql`
   mutation createSession($user: UserIntput!) {
     createSession(user: $user) {
       authentication_token
+      autentication
     }
   }
 `;
