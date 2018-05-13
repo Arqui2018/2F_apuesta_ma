@@ -51,7 +51,7 @@ export default class Login extends Component {
         this.setState({ email: '', password: '' });
         Alert.alert('Correo electrónico o contraseña no validos');
       } else {
-        await AsyncStorage.setItem('@apuesta:token', data.authentication_token);
+        await AsyncStorage.setItem('@bet:token', data.authentication_token);
         this.props.navigation.navigate('App');
       }
     } catch (err) {

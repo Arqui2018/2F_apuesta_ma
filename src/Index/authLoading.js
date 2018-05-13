@@ -6,7 +6,7 @@ import styles from '../assets/css/index';
 export default class AuthLoadingScreen extends Component {
   async componentWillMount() {
     try {
-      const userToken = await AsyncStorage.getItem('@apuesta:token');
+      const userToken = await AsyncStorage.getItem('@bet:token');
       this.props.navigation.navigate(userToken ? 'App' : 'Auth');
     } catch (err) {
       Alert.alert(err);

@@ -5,6 +5,7 @@ import ProfileScreen from '../Profile/profile';
 import MatchesByDateScreen from '../Matches/matchesByDate';
 import MatchesByDayScreen from '../Matches/matchesByDay';
 import BetScreen from '../Bet/bet';
+import LogOutScreen from '../LogOut/index';
 import SideBar from '../SideBar/SideBar';
 
 const AppStack = DrawerNavigator(
@@ -14,6 +15,7 @@ const AppStack = DrawerNavigator(
     MatchesByDate: { screen: MatchesByDateScreen },
     MatchesByDay: { screen: MatchesByDayScreen },
     Bet: { screen: BetScreen },
+    LogOut: { screen: LogOutScreen },
   },
   {
     contentComponent: props => <SideBar {...props} />,

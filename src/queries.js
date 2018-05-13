@@ -21,10 +21,11 @@ export const SESSION_BY_TOKEN = gql`
   }
 `;
 
-export const REMOVE_SESSION = gql`
-  mutation removeSession($token: String!) {
-    removeSession(token: $token) {
+export const DESTROY_SESSION = gql`
+  mutation destroySession($token: String!) {
+    destroySession(token: $token) {
       id
+      autentication
     }
   }
 `;
