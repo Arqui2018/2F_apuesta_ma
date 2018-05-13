@@ -38,7 +38,7 @@ export default class App extends Component {
     if (!this.state.fontLoaded) {
       return (
         <View style={[styles.container, styles.horizontal]}>
-          <Spinner />
+          <Spinner color="red" />
         </View>
       );
     }

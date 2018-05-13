@@ -16,7 +16,7 @@ export default class AuthLoadingScreen extends Component {
   render() {
     return (
       <View style={[styles.container, styles.horizontal]}>
-        <Spinner />
+        <Spinner color="red" />
       </View>
     );
   }

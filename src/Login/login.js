@@ -31,7 +31,7 @@ export default class Login extends Component {
     this.login = this.login.bind(this);
   }
 
-  login() {
+  async login() {
     const user = {
       email: this.state.email.toLowerCase().trim(),
       password: this.state.password.trim(),
@@ -43,20 +43,20 @@ export default class Login extends Component {
     if (!user.password.length) {
       return Alert.alert();
     }
-    
 
-    clientRequest.request(CREATE_SESSION, { user })
-      .then(async (data) => {
-        data = data.createSession;
-        if (!data.autentication) {
-          this.setState({ email: '', password: '' });
-          Alert.alert('Correo electrónico o contraseña no validos')
-        } else {
-          await AsyncStorage.setItem('@apuesta:token', data.authentication_token);
-          this.props.navigation.navigate('App');
-        }
-      })
-      .catch(() => Alert.alert('Correo electrónico o contraseña no validos'));
+    try {
+      let data = await clientRequest.request(CREATE_SESSION, { user });
+      data = data.createSession;
+      if (!data.autentication) {
+        this.setState({ email: '', password: '' });
+        Alert.alert('Correo electrónico o contraseña no validos');
+      } else {
+        await AsyncStorage.setItem('@apuesta:token', data.authentication_token);
+        this.props.navigation.navigate('App');
+      }
+    } catch (err) {
+      Alert.alert('Correo electrónico o contraseña no validos');
+    }
   }
 
 
