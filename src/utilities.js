@@ -1,5 +1,5 @@
 import { AsyncStorage } from 'react-native';
-import { SESSION_BY_TOKEN } from './queries';
+import { SESSION_BY_TOKEN, WALLET_BY_ID } from './queries';
 import { clientRequest } from '../App';
 
 export async function userData() {
@@ -8,6 +8,9 @@ export async function userData() {
     const data = await clientRequest.request(SESSION_BY_TOKEN, { token });
     const isAutenticated = data.sessionByToken.autentication;
     if (isAutenticated) {
+      const id = parseInt(data.sessionByToken.wallet_id, 10);
+      const { walletById } = await clientRequest.request(WALLET_BY_ID, { id });
+      data.sessionByToken.balance = walletById.balance;
       return data.sessionByToken;
     }
     return false;

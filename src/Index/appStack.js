@@ -1,7 +1,7 @@
 import React from 'react';
 import { DrawerNavigator } from 'react-navigation';
 import IndexScreen from './index';
-import ProfileScreen from '../Profile/profile';
+import ProfileScreen from '../Profile/index';
 import MatchesByDateScreen from '../Matches/matchesByDate';
 import MatchesByDayScreen from '../Matches/matchesByDay';
 import BetScreen from '../Bet/bet';
