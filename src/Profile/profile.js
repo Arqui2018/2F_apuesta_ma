@@ -1,185 +1,79 @@
-import React from 'react';
-import { ListView, View } from 'react-native';
-import { Container, Header, Title, Content } from 'native-base';
-import { Button, Body, Icon, Left, Text, Item } from 'native-base';
-import { Input, List, ListItem, Row, H1 } from 'native-base';
-import { AppLoading, Font } from 'expo';
+import React, { Component } from 'react';
 
+import { Alert } from 'react-native';
+import { Container, Content, Body, Icon, Text, List, ListItem, H1 } from 'native-base';
+
+
+import Header from '../components/header';
 import Footer from '../components/footer';
-import gql from "graphql-tag";
-import { Query } from "react-apollo";
-import { client } from '../../App';
 
-import { getStatusBarHeight } from 'react-native-status-bar-height';
+import { clientRequest } from '../../App';
+import { userData, locale } from '../utilities';
+import { WALLET_BY_ID } from '../queries';
 
-function locale(number) {
-  return number.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-}
-
-export default class Profile extends React.Component{
+export default class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      allResults: [],
+      name: 'Cargando ...',
+      email: 'Cargando ...',
+      wallet_id: 'Cargando ...',
+      balance: 'Cargando ...',
     };
   }
 
-  componentWillMount() {
-    client
-      .query({
-        query: gql`
-        {
-          allResults {
-            user_id
-            amount
-            date
-            g_local
-            g_visit
-            winner
-            match_id
-            wallet_id
-          }
-        }`
-      })
-      .then(data => {
-        const myBets = [];
-        data.data.allResults.forEach(item => {
-          if (item.user_id === 1)
-            myBets.push(item)
+  async componentWillMount() {
+    try {
+      const data = await userData();
+      if (data) {
+        this.setState({
+          name: data.name,
+          email: data.email,
+          wallet_id: data.wallet_id,
         });
-        this.setState({ allResults: myBets });
-      });
-  }
-
-
-  getBets() {
-    return this.state.allResults.map((item, i) => (
-      <ListItem key={i}>
-        <Body>
-          <Text>{this.getMatchById(item.match_id, item.g_local, item.g_visit, locale(item.amount))}</Text>
-        </Body>
-      </ListItem>
-    ));
-  }
-
-  getMatchById(idMatch, local, visitor, amount) {
-    const GET_MATCH = gql`
-      query matchById($idMatch: Int!) {
-        matchById(id: $idMatch) {
-          team_local_id
-          team_visitor_id
-        }
+        const id = parseInt(data.wallet_id, 10);
+        const { walletById } = await clientRequest.request(WALLET_BY_ID, { id });
+        this.setState({ balance: locale(Number(walletById.balance)) });
       }
-    `;
-
-    return (
-      <Query query={GET_MATCH} variables={{ idMatch }}>
-        {({ loading, error, data }) => {
-
-          if (loading)
-            return 'Loading...';
-          if (error)
-            return `Error!: ${error}`;
-
-          data = data.matchById;
-
-          return (
-            <Text>
-              {this.getNameTeam(data.team_local_id)} {` ${local} - ${visitor} `} {this.getNameTeam(data.team_visitor_id)}
-              <Text>{`\t${amount}`}</Text>
-          </Text>);
-        }}
-      </Query>
-    );
+    } catch (err) {
+      Alert.alert(err);
+    }
   }
 
-  getNameTeam(idTeam) {
-    const GET_NAME_TEAM = gql`
-      query teamById($idTeam: Int!) {
-        teamById(id: $idTeam) {
-          name
-        }
-      }
-    `;
-
-    return (
-      <Query query={GET_NAME_TEAM} variables={{ idTeam }}>
-        {({ loading, error, data }) => {
-
-          if (loading)
-            return 'Loading...';
-          if (error)
-            return `Error!: ${error}`;
-
-          return data.teamById.name.toString();
-        }}
-      </Query>
-    );
-  }
-
-  getBalance() {
-
-    const GET_BALANCE = gql`
-      query walletById($id: Int!) {
-        walletById(id: $id) {
-          balance
-        }
-      }
-    `;
-
-    return (
-      <Query query={GET_BALANCE} variables={{id: 1}}>
-        {({ loading, error, data }) => {
-
-          if (loading)
-            return 'Loading';
-          if (error)
-            return `Error!: ${error}`;
-
-          return locale(data.walletById.balance);
-        }}
-      </Query>
-    );
-  }
-
-  render(){
+  render() {
     return (
       <Container>
-        <Header style={{backgroundColor: "red", paddingTop: getStatusBarHeight(), height: 45 + getStatusBarHeight()}}>
-          <Left>
-            <Button transparent onPress={() => this.props.navigation.goBack()}>
-              <Icon name="arrow-back" />
-            </Button>
-          </Left>
-          <Body>
-            <Title>
-              Apuesta mUNdial
-            </Title>
-          </Body>
-
-        </Header>
+        <Header nameIcon="arrow-back" redirect={() => this.props.navigation.goBack()} />
 
         <Content padder>
 
-          <H1 style={{ marginTop: 10, alignSelf: "center" }}>Información personal</H1>
+          <H1 style={{ marginTop: 10, alignSelf: 'center' }}>Información personal</H1>
+
           <List>
             <ListItem>
               <Icon active name="contact" />
               <Body>
-                <Text>Example</Text>
+                <Text>{this.state.name}</Text>
+              </Body>
+            </ListItem>
+            <ListItem>
+              <Icon active name="ios-mail" />
+              <Body>
+                <Text>{this.state.email}</Text>
+              </Body>
+            </ListItem>
+            <ListItem>
+              <Icon active name="ios-card" />
+              <Body>
+                <Text>{this.state.wallet_id}</Text>
               </Body>
             </ListItem>
             <ListItem>
               <Icon active name="logo-usd" />
               <Body>
-                <Text>{this.getBalance()}</Text>
+                <Text>{this.state.balance}</Text>
               </Body>
             </ListItem>
-          </List>
-
-          <H1 style={{ marginTop: 25, alignSelf: "center" }}>Apuestas</H1>
-          <List>
-            {this.getBets()}
           </List>
 
         </Content>
