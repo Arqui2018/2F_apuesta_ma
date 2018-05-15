@@ -1,22 +1,24 @@
 import React, { Component } from 'react';
 
 import { Container, Content, H1, Spinner } from 'native-base';
-import { Alert } from 'react-native';
+import { Alert, AsyncStorage } from 'react-native';
 
 import Header from '../components/header';
 import Footer from '../components/footer';
 
 import { clientRequest } from '../../App';
-import { userData } from '../utilities';
-import { RESULT_BY_USER } from '../queries';
+import { userData, locale } from '../utilities';
+import { RESULT_BY_USER, SESSION_BY_TOKEN, UPDATE_WALLET, DELETE_RESULT } from '../queries';
 import SwipeRow from './swipeRow';
+
 
 export default class MyBets extends Component {
   constructor(props) {
     super(props);
     this.state = {
       myBets: [],
-    }
+    };
+    this.deleteBet = this.deleteBet.bind(this);
   }
 
   async componentWillMount() {
@@ -30,7 +32,44 @@ export default class MyBets extends Component {
     }
   }
 
+  deleteBet(id, teams) {
+    const amount = parseInt(this.state.myBets.find(item => item.id === id).amount, 10);
 
+    const removeBet = async () => {
+      try {
+        const token = await AsyncStorage.getItem('@bet:token');
+        const { sessionByToken } = await clientRequest.request(SESSION_BY_TOKEN, { token });
+
+        const idUser = parseInt(sessionByToken.id, 10);
+        const balance = parseInt(amount * 0.95, 10);
+        const updatedWallet = clientRequest.request(UPDATE_WALLET, { id: idUser, wallet: { balance } });
+        const removedMyBet = clientRequest.request(DELETE_RESULT, { id });
+        await Promise.all([updatedWallet, removedMyBet]);
+
+        const auxCopy = this.state.myBets;
+        for (let i = 0; i < auxCopy.length; i += 1) {
+          if (auxCopy[i].id === id) {
+            auxCopy.splice(i, 1); // remove bet of state
+            break;
+          }
+        }
+        this.setState({ myBets: auxCopy });
+        Alert.alert('La apuesta ha sido eliminada exitosamente');
+      } catch (err) {
+        Alert.alert(err);
+      }
+    };
+
+    Alert.alert(
+      '¿Esta seguro que desea eliminar la apuesta?',
+      `${teams.teamLocal} vs ${teams.teamVisitor} con un valor de $${locale(amount)}`,
+      [
+        { text: 'Cancelar', onPress: () => {}, style: 'cancel' },
+        { text: 'Aceptar', onPress: removeBet },
+      ],
+      { cancelable: false },
+    );
+  }
 
   render() {
     return (
@@ -45,6 +84,7 @@ export default class MyBets extends Component {
               <SwipeRow
                 key={index}
                 match={item}
+                deleteBet={this.deleteBet}
               />
               ))
             : <Spinner color="red" />

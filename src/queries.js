@@ -37,6 +37,7 @@ export const DESTROY_SESSION = gql`
 export const RESULT_BY_USER = gql`
   query resultByUser($id: Int!) {
     resultByUser(id: $id) {
+      id
       amount
       date
       g_local
@@ -47,6 +48,22 @@ export const RESULT_BY_USER = gql`
     }
   }
 `;
+
+export const DELETE_RESULT = gql`
+  mutation deleteResult($id: Int!) {
+    deleteResult(id: $id) {
+      id
+      user_id
+      amount
+      date
+      g_local
+      g_visit
+      winner
+      match_id
+      wallet_id
+    }
+  }
+`
 
 
 // wallet_ms
@@ -80,6 +97,16 @@ export const MATCH_BY_ID = gql`
       goals_local
       goals_visitor
       date
+    }
+  }
+`;
+
+// wallet_ms
+
+export const UPDATE_WALLET = gql`
+  mutation updateWallet($id: Int!, $wallet: WalletInput!){
+    updateWallet(id: $id, wallet: $wallet) {
+      balance
     }
   }
 `;

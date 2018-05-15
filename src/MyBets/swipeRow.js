@@ -5,7 +5,7 @@ import { Alert } from 'react-native';
 
 
 import { clientRequest } from '../../App';
-import { nameTeam } from '../utilities';
+import { nameTeam, locale } from '../utilities';
 import { MATCH_BY_ID } from '../queries';
 
 export default class MySwipeRow extends Component {
@@ -28,6 +28,8 @@ export default class MySwipeRow extends Component {
     }
   }
 
+  // redirect to update
+
   render() {
 
     return (
@@ -41,11 +43,17 @@ export default class MySwipeRow extends Component {
         }
         body={
           <View>
-            <Text style={{ paddingLeft: 15 }}>{this.state.teamLocal} {' vs '} {this.state.teamVisitor}</Text>
+            <Text style={{ paddingLeft: 15 }}>
+              {this.state.teamLocal}
+              {' vs '}
+              {this.state.teamVisitor}
+              {'\t\t $'}
+              {locale(parseInt(this.props.match.amount, 10))}
+            </Text>
           </View>
         }
         right={
-          <Button danger onPress={() => alert('Trash')}>
+          <Button danger onPress={() => this.props.deleteBet(this.props.match.id, this.state)}>
             <Icon active type="FontAwesome" name="trash" />
           </Button>
         }
