@@ -76,13 +76,24 @@ export const WALLET_BY_ID = gql`
   }
 `;
 
-// match_ms
+// matches_ms
 
 export const TEAM_BY_ID = gql`
   query teamById($id: Int!) {
     teamById(id: $id) {
       id
       name
+    }
+  }
+`;
+
+export const ALL_MATCHES = gql`
+  query {
+    allMatches {
+      id
+      team_local_id
+      team_visitor_id
+      date
     }
   }
 `;

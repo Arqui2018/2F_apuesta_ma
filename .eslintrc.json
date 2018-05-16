@@ -5,6 +5,7 @@
       "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
       "global-require": "off",
       "react/prefer-stateless-function": "off",
-      "react/prop-types": "off"
+      "react/prop-types": "off",
+      "function-paren-newline": "off"
     }
 }

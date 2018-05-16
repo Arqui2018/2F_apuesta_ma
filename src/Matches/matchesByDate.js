@@ -15,7 +15,6 @@ import Header from '../components/header';
 import Footer from '../components/footer';
 
 export default class MatchesByDate extends Component {
-
   getAllDays() {
     const days = [];
     const week = ['Jueves', 'Viernes', 'Sabado', 'Domingo', 'Lunes', 'Martes', 'Miercoles'];
@@ -41,7 +40,7 @@ export default class MatchesByDate extends Component {
         <Header nameIcon="arrow-back" redirect={() => this.props.navigation.goBack()} />
 
         <Content>
-          <H1 style={{ textAlign: 'center' }}>Fecha</H1>
+          <H1 style={{ textAlign: 'center', margin: 25 }}>Fecha</H1>
           <List>
             {this.getAllDays()}
           </List>

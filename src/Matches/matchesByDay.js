@@ -1,117 +1,57 @@
 import React, { Component } from 'react';
-import {
-  Body,
-  Button,
-  Container,
-  Content,
-  Header,
-  H1,
-  Icon,
-  Left,
-  List,
-  ListItem,
-  Right,
-  Spinner,
-  Text,
-  Title
-} from 'native-base';
+
+import { Container, Content, H1, List, Spinner } from 'native-base';
+import { Alert } from 'react-native';
+
+import { ALL_MATCHES } from '../queries';
+import { clientRequest } from '../../App';
+
+import Header from '../components/header';
 import Footer from '../components/footer';
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
-import { getStatusBarHeight } from 'react-native-status-bar-height';
+import ListItemMatch from './listItemMatch';
 
 export default class MatchesByDay extends Component {
-
-  getNameTeam(idTeam) {
-    const GET_NAME_TEAM = gql`
-      query teamById($idTeam: Int!) {
-        teamById(id: $idTeam) {
-          name
-        }
-      }
-    `;
-
-    return (
-      <Query query={GET_NAME_TEAM} variables={{ idTeam }}>
-        {({ loading, error, data }) => {
-
-          if (loading)
-            return 'Loading...';
-          if (error)
-            return `Error!: ${error}`;
-
-          return data.teamById.name.toString();
-        }}
-      </Query>
-    );
+  constructor(props) {
+    super(props);
+    this.state = {
+      dayAllMatches: [],
+      day: 0,
+    };
   }
 
-  getMatchesByDay() {
-    const day = parseInt(this.props.navigation.state.params.day);
-    const GET_MATCHES = gql`
-      {
-        allMatches {
-          id
-          team_local_id
-          team_visitor_id
-          date
-        }
-      }
-    `;
 
-    return (
-      <Query query={GET_MATCHES}>
-        {({ loading, error, data }) => {
+  async componentWillMount() {
+    const { day } = this.props.navigation.state.params;
 
-          if (loading)
-            return <Spinner/>;
-          if (error)
-            return <Text>Error :(</Text>;
-
-          var matches = [];
-          let dayAllMathes;
-          data.allMatches.forEach(item => {
-            dayAllMathes = parseInt(new Date(item.date).getDate());
-            if (dayAllMathes === day)
-              matches.push(item);
-          });
-
-          return matches.map((match, i) =>
-            <ListItem
-              key={i}
-              onPress={() => this.props.navigation.navigate('Bet', {match, day})}
-            >
-              <Body>
-                <Text>{this.getNameTeam(match.team_local_id)} {` VS `} {this.getNameTeam(match.team_visitor_id)}</Text>
-              </Body>
-              <Right><Icon name="md-arrow-dropright" /></Right>
-            </ListItem>
-          );
-        }}
-      </Query>
-    );
+    try {
+      const { allMatches } = await clientRequest.request(ALL_MATCHES);
+      const dayAllMatches = allMatches.filter(item => (new Date(item.date).getDate()) === day);
+      this.setState({ dayAllMatches, day });
+    } catch (err) {
+      Alert.alert(err);
+    }
   }
 
   render() {
     return (
       <Container>
-        <Header style={{backgroundColor: "red", paddingTop: getStatusBarHeight(), height: 45 + getStatusBarHeight()}}>
-          <Left>
-            <Button transparent onPress={() => this.props.navigation.navigate('MatchesByDate')}>
-              <Icon name="arrow-back" />
-            </Button>
-          </Left>
-          <Body>
-            <Title>
-              Apuesta mUNdial
-            </Title>
-          </Body>
-        </Header>
+        <Header nameIcon="arrow-back" redirect={() => this.props.navigation.navigate('MatchesByDate')} />
+
 
         <Content padder>
-          <H1 style={{ textAlign: 'center' }}>Partidos</H1>
+          <H1 style={{ textAlign: 'center', margin: 25 }}>Partidos</H1>
           <List>
-            {this.getMatchesByDay()}
+            {this.state.dayAllMatches.length
+              ? this.state.dayAllMatches.map(item =>
+                  (<ListItemMatch
+                    key={item.toString()}
+                    match={item}
+                    day={this.state.day}
+                    navigation={this.props.navigation}
+                  />)
+                )
+              : <Spinner color="red" />
+            }
           </List>
         </Content>
 
