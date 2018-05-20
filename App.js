@@ -9,10 +9,10 @@ import Home from './src/Index/home';
 import styles from './src/assets/css/index';
 
 export const client = new ApolloClient({
-  uri: 'http://104.42.172.100/graphql',
+  uri: 'http://40.112.162.226/graphql',
 });
 
-export const clientRequest = new GraphQLClient('http://104.42.172.100/graphql');
+export const clientRequest = new GraphQLClient('http://40.112.162.226/graphql');
 
 export default class App extends Component {
   constructor(props) {

@@ -34,10 +34,41 @@ export const DESTROY_SESSION = gql`
 
 // result_ms
 
+export const CREATE_RESULT = gql`
+  mutation createResult($result: ResultInput!) {
+    createResult(result: $result) {
+      user_id
+      amount
+      date
+      g_local
+      g_visit
+      winner
+      match_id
+      wallet_id
+    }
+  }
+`;
+
 export const RESULT_BY_USER = gql`
   query resultByUser($id: Int!) {
     resultByUser(id: $id) {
       id
+      amount
+      date
+      g_local
+      g_visit
+      winner
+      match_id
+      wallet_id
+    }
+  }
+`;
+
+export const RESULT_BY_MATCH = gql`
+  query resultByMatch($id: Int!) {
+    resultByMatch(id: $id) {
+      id
+      user_id
       amount
       date
       g_local
@@ -63,7 +94,7 @@ export const DELETE_RESULT = gql`
       wallet_id
     }
   }
-`
+`;
 
 
 // wallet_ms
@@ -91,9 +122,9 @@ export const ALL_MATCHES = gql`
   query {
     allMatches {
       id
+      date
       team_local_id
       team_visitor_id
-      date
     }
   }
 `;

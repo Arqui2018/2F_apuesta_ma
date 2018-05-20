@@ -41,7 +41,7 @@ export default class MyBets extends Component {
         const { sessionByToken } = await clientRequest.request(SESSION_BY_TOKEN, { token });
 
         const idUser = parseInt(sessionByToken.id, 10);
-        const balance = parseInt(amount * 0.95, 10);
+        const balance = parseInt(amount * 0.9, 10);
         const updatedWallet = clientRequest.request(UPDATE_WALLET, { id: idUser, wallet: { balance } });
         const removedMyBet = clientRequest.request(DELETE_RESULT, { id });
         await Promise.all([updatedWallet, removedMyBet]);

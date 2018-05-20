@@ -4,7 +4,7 @@ import IndexScreen from './index';
 import ProfileScreen from '../Profile/index';
 import MatchesByDateScreen from '../Matches/matchesByDate';
 import MatchesByDayScreen from '../Matches/matchesByDay';
-import BetScreen from '../Bet/bet';
+import BetScreen from '../Bet/index';
 import LogOutScreen from '../LogOut/index';
 import SideBar from '../SideBar/SideBar';
 import MyBetsScreen from '../MyBets/index';

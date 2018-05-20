@@ -10,6 +10,13 @@ const Styles = StyleSheet.create({
     justifyContent: 'space-around',
     padding: 10,
   },
+  bet: {
+    flex: 1,
+    marginLeft: 10,
+    marginRight: 10,
+    alignItems: 'stretch',
+    justifyContent: 'center',
+  },
 });
 
 export default Styles;

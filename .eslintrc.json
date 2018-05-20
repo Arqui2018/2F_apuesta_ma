@@ -6,6 +6,7 @@
       "global-require": "off",
       "react/prefer-stateless-function": "off",
       "react/prop-types": "off",
-      "function-paren-newline": "off"
+      "function-paren-newline": "off",
+      "no-plusplus": "off"
     }
 }
