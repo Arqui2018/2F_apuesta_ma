@@ -19,7 +19,7 @@ export default class MySwipeRow extends Component {
 
   async componentWillMount() {
     try {
-      const id = Number(this.props.match.match_id);
+      const id = Number(this.props.result.match_id);
       const { matchById } = await clientRequest.request(MATCH_BY_ID, { id });
       nameTeam(matchById.team_local_id).then(teamLocal => this.setState({ teamLocal }));
       nameTeam(matchById.team_visitor_id).then(teamVisitor => this.setState({ teamVisitor }));
@@ -28,16 +28,15 @@ export default class MySwipeRow extends Component {
     }
   }
 
-  // redirect to update
-
   render() {
 
+    // this.props.navigation.navigate('Bet', { result: this.props.result;
     return (
       <SwipeRow
         leftOpenValue={75}
         rightOpenValue={-75}
         left={
-          <Button success onPress={() => alert('Add')}>
+          <Button success onPress={() => this.props.editBet(this.props.result)}>
             <Icon active type="FontAwesome" name="pencil" />
           </Button>
         }
@@ -48,12 +47,12 @@ export default class MySwipeRow extends Component {
               {' vs '}
               {this.state.teamVisitor}
               {'\t\t $'}
-              {locale(parseInt(this.props.match.amount, 10))}
+              {locale(parseInt(this.props.result.amount, 10))}
             </Text>
           </View>
         }
         right={
-          <Button danger onPress={() => this.props.deleteBet(this.props.match.id, this.state)}>
+          <Button danger onPress={() => this.props.deleteBet(this.props.result.id, this.state)}>
             <Icon active type="FontAwesome" name="trash" />
           </Button>
         }

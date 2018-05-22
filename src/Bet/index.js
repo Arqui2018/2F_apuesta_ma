@@ -11,7 +11,7 @@ import Header from '../components/header';
 import Footer from '../components/footer';
 
 import { clientRequest } from '../../App';
-import { RESULT_BY_MATCH, CREATE_RESULT, UPDATE_WALLET } from '../queries';
+import { RESULT_BY_MATCH, CREATE_RESULT, UPDATE_WALLET, MATCH_BY_ID, UPDATE_RESULT } from '../queries';
 
 
 export default class Bet extends Component {
@@ -36,32 +36,43 @@ export default class Bet extends Component {
     this.makeAction = this.makeAction.bind(this);
     this.calculateStadistics = this.calculateStadistics.bind(this);
     this.createResult = this.createResult.bind(this);
+    this.updateResult = this.updateResult.bind(this);
   }
 
   async componentWillMount() {
     const { params } = this.props.navigation.state;
 
-    try {
-      const { resultByMatch } = await clientRequest.request(RESULT_BY_MATCH, { id: params.match.id });
-      this.setState({ allResults: resultByMatch });
+    if (!Object.prototype.hasOwnProperty.call(params, 'day')) {
+      await this.setState({ activity: 'Actualizar' });
 
-    } catch (err) {
-      Alert.alert(err);
     }
 
-    if (!('day' in params)) {
-      this.setState({ activity: 'Actualizar' });
+    if (Object.prototype.hasOwnProperty.call(params, 'result')) {
+      this.setState({
+        amount: params.result.amount,
+        goalsLocal: String(params.result.g_local),
+        goalsVisitor: String(params.result.g_visit),
+      });
+      const { matchById } = await clientRequest.request(MATCH_BY_ID, { id: params.result.match_id });
+      params.match = matchById;
     }
 
-    if ('match' in params) {
+    if (Object.prototype.hasOwnProperty.call(params, 'match')) {
       this.setState({ match: params.match });
       nameTeam(params.match.team_local_id).then(matchLocal => this.setState({ matchLocal }));
       nameTeam(params.match.team_visitor_id).then(matchVisitor => this.setState({ matchVisitor }));
     }
 
-    // console.log(this.state);
+    try {
+      const { resultByMatch } = await clientRequest.request(RESULT_BY_MATCH, { id: params.match.id });
+      this.setState({ allResults: resultByMatch });
+    } catch (err) {
+      Alert.alert(err);
+    }
 
-    this.calculateStadistics();
+    if (this.state.activity === 'Actualizar') {
+      this.calculateStadistics();
+    }
   }
 
   async changeValue(key, value) {
@@ -69,23 +80,17 @@ export default class Bet extends Component {
     this.calculateStadistics();
   }
 
-  async updateBet(key, value) {
-    await this.changeValue(key, value);
-  }
-
   calculateStadistics() {
     if (this.state.goalsLocal && this.state.goalsVisitor) {
       let count = 0;
-      let betWithMatch = 0;
+      const betWithMatch = this.state.allResults.length;
       let pool = 0;
       let sum = parseInt(this.state.amount, 10);
       const goalsLocal = parseInt(this.state.goalsLocal, 10);
       const goalsVisitor = parseInt(this.state.goalsVisitor, 10);
-      const results = this.state.allResults;
       const amount = parseInt(this.state.amount, 10);
 
-      results.forEach((bet) => {
-        betWithMatch++;
+      this.state.allResults.forEach((bet) => {
         if (bet.g_local === goalsLocal && bet.g_visit === goalsVisitor) {
           sum += bet.amount;
           count++;
@@ -104,7 +109,6 @@ export default class Bet extends Component {
         bets: betWithMatch,
         toWin,
       });
-      console.log(this.state.amount, results);
     }
   }
 
@@ -120,16 +124,53 @@ export default class Bet extends Component {
             { cancelable: false },
           ],
         );
-      } else {
-        Alert.alert('I am the fuck lord'); // update bet
+      } else { // updateBet
+        Alert.alert(
+          '¿Esta seguro que sea apostar editar este partido?',
+          `El valor de la apuesta es de ${locale(this.state.amount)}`,
+          [
+            { text: 'Cancelar', onPress: () => {}, style: 'cancel' },
+            { text: 'Aceptar', onPress: () => this.updateResult() },
+            { cancelable: false },
+          ],
+        );
       }
     } else {
       Alert.alert('Por favor ingrese el marcador');
     }
   }
 
+  async updateResult() {
+    try {
+      const user = await userData();
+      const result = {
+        user_id: parseInt(user.id, 10),
+        amount: parseInt(this.state.amount, 10),
+        g_local: parseInt(this.state.goalsLocal, 10),
+        g_visit: parseInt(this.state.goalsVisitor, 10),
+        match_id: parseInt(this.state.match.id, 10),
+        wallet_id: parseInt(user.wallet_id, 10),
+      };
+
+      const { params } = this.props.navigation.state;
+      const originalAmount = params.result.amount;
+      const { id } = params.result;
+
+      const dataResult = clientRequest.request(UPDATE_RESULT, { id, result });
+      const dataWallet = clientRequest.request(
+        UPDATE_WALLET,
+        { id: user.id, wallet: { balance: result.amount - originalAmount } },
+      );
+      await Promise.all([dataResult, dataWallet]);
+      Alert.alert('Felicitaciones', 'Apuesta ha sido editada Exitosamente');
+      this.props.navigation.navigate('MyBets'); // return mybets
+    } catch (err) {
+      console.log(JSON.stringify(err));
+      Alert.alert(JSON.stringify(err));
+    }
+  }
+
   async createResult() {
-    console.log('I am the best');
     try {
       const user = await userData();
       const result = {
@@ -144,7 +185,7 @@ export default class Bet extends Component {
       const dataResult = clientRequest.request(CREATE_RESULT, { result });
       const dataWallet = clientRequest.request(
         UPDATE_WALLET,
-        { id: user.id, wallet: { balance: result.amount } },
+        { id: user.id, wallet: { balance: -result.amount } }, // calc diference
       );
       await Promise.all([dataResult, dataWallet]);
       Alert.alert('Felicitaciones', 'Apuesta creata Exitosamente');
@@ -200,7 +241,7 @@ export default class Bet extends Component {
                   <Text style={{ alignSelf: 'center' }}>Cantidad de Apuesta</Text>
                   <Slider
                     value={this.state.amount}
-                    onValueChange={value => this.updateBet('amount', value)}
+                    onValueChange={value => this.changeValue('amount', value)}
                     minimumValue={10000}
                     maximumValue={2000000}
                     step={10000}

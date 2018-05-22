@@ -19,6 +19,7 @@ export default class MyBets extends Component {
       myBets: [],
     };
     this.deleteBet = this.deleteBet.bind(this);
+    this.editBet = this.editBet.bind(this);
   }
 
   async componentWillMount() {
@@ -71,6 +72,10 @@ export default class MyBets extends Component {
     );
   }
 
+  editBet(result) {
+    this.props.navigation.navigate('Bet', { result });
+  }
+
   render() {
     return (
       <Container>
@@ -80,11 +85,12 @@ export default class MyBets extends Component {
           <H1 style={{ textAlign: 'center', margin: 25 }}>Mis Apuestas</H1>
 
           { this.state.myBets.length
-            ? this.state.myBets.map((item, index) => (
+            ? this.state.myBets.map(item => (
               <SwipeRow
-                key={index}
-                match={item}
+                key={JSON.stringify(item)}
+                result={item}
                 deleteBet={this.deleteBet}
+                editBet={this.editBet}
               />
               ))
             : <Spinner color="red" />

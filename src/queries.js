@@ -49,6 +49,21 @@ export const CREATE_RESULT = gql`
   }
 `;
 
+export const UPDATE_RESULT = gql`
+  mutation updateResult($id: Int!, $result: ResultInput!){
+    updateResult(id: $id, result: $result) {
+      user_id
+      amount
+      date
+      g_local
+      g_visit
+      winner
+      match_id
+      wallet_id
+    }
+  }
+`;
+
 export const RESULT_BY_USER = gql`
   query resultByUser($id: Int!) {
     resultByUser(id: $id) {
