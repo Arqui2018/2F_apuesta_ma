@@ -90,6 +90,7 @@ export default class Bet extends Component {
       const goalsVisitor = parseInt(this.state.goalsVisitor, 10);
       const amount = parseInt(this.state.amount, 10);
 
+      console.log(betWithMatch);
       this.state.allResults.forEach((bet) => {
         if (bet.g_local === goalsLocal && bet.g_visit === goalsVisitor) {
           sum += bet.amount;
@@ -159,7 +160,7 @@ export default class Bet extends Component {
       const dataResult = clientRequest.request(UPDATE_RESULT, { id, result });
       const dataWallet = clientRequest.request(
         UPDATE_WALLET,
-        { id: user.id, wallet: { balance: result.amount - originalAmount } },
+        { id: user.id, wallet: { balance: originalAmount - result.amount } },
       );
       await Promise.all([dataResult, dataWallet]);
       Alert.alert('Felicitaciones', 'Apuesta ha sido editada Exitosamente');
