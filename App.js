@@ -12,7 +12,7 @@ export const client = new ApolloClient({
   uri: 'http://40.112.162.226/graphql',
 });
 
-export const clientRequest = new GraphQLClient('http://40.112.162.226/graphql');
+export const clientRequest = new GraphQLClient('http://104.198.91.25/graphql');
 
 export default class App extends Component {
   constructor(props) {
