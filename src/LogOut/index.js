@@ -1,8 +1,9 @@
-import { Button, Container, Content, Form, H2, Text } from 'native-base';
+import { Button, Container, Content, Form, H1, Text, View } from 'native-base';
 import { Alert, AsyncStorage } from 'react-native';
 import React, { Component } from 'react';
 import { clientRequest } from '../../App';
 import { DESTROY_SESSION } from '../queries';
+import { Col, Row, Grid } from 'react-native-easy-grid';
 
 import Header from '../components/header';
 import Footer from '../components/footer';
@@ -36,14 +37,20 @@ export default class LogOut extends Component {
         <Header nameIcon="arrow-back" redirect={() => { this.props.navigation.navigate('Home'); }} />
 
         <Content padder>
-          <H2>¿Esta seguro de cerrar la sesión?</H2>
+          <Text style={{ marginTop: 10, alignSelf: 'center' }}>¿Esta seguro de desea cerrar sesión?</Text>
           <Form>
-            <Button block onPress={this.removeSession}>
-              <Text>Si</Text>
-            </Button>
-            <Button block onPress={() => { this.props.navigation.navigate('Home'); }}>
-              <Text>No</Text>
-            </Button>
+            <Grid>
+              <Col>
+                <Button onPress={this.removeSession} rounded danger style={{ marginTop: 25, alignSelf: 'center' }}>
+                  <Text>Si</Text>
+                </Button>
+              </Col>
+              <Col>
+                <Button onPress={() => { this.props.navigation.navigate('Home'); }} rounded danger style={{ marginTop: 25, alignSelf: 'center' }}>
+                  <Text>No</Text>
+                </Button>
+              </Col>
+            </Grid>
           </Form>
         </Content>
 
