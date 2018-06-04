@@ -30,7 +30,6 @@ export default class MySwipeRow extends Component {
 
   render() {
 
-    // this.props.navigation.navigate('Bet', { result: this.props.result;
     return (
       <SwipeRow
         leftOpenValue={75}

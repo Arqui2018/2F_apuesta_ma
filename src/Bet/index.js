@@ -44,7 +44,6 @@ export default class Bet extends Component {
 
     if (!Object.prototype.hasOwnProperty.call(params, 'day')) {
       await this.setState({ activity: 'Actualizar' });
-
     }
 
     if (Object.prototype.hasOwnProperty.call(params, 'result')) {
@@ -90,7 +89,6 @@ export default class Bet extends Component {
       const goalsVisitor = parseInt(this.state.goalsVisitor, 10);
       const amount = parseInt(this.state.amount, 10);
 
-      console.log(betWithMatch);
       this.state.allResults.forEach((bet) => {
         if (bet.g_local === goalsLocal && bet.g_visit === goalsVisitor) {
           sum += bet.amount;
@@ -166,7 +164,6 @@ export default class Bet extends Component {
       Alert.alert('Felicitaciones', 'Apuesta ha sido editada Exitosamente');
       this.props.navigation.navigate('MyBets'); // return mybets
     } catch (err) {
-      console.log(JSON.stringify(err));
       Alert.alert(JSON.stringify(err));
     }
   }

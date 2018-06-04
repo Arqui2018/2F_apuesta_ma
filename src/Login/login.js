@@ -6,19 +6,22 @@ import {
   Content,
   Form,
   Header,
+  Label,
+  Icon,
   Item,
   Input,
+  Spinner,
   Text,
-  Title
+  Title,
+  View
 } from 'native-base';
-import { Alert, AsyncStorage } from 'react-native';
+import { Alert, AsyncStorage, Image } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import React, { Component } from 'react';
 import { CREATE_SESSION } from '../queries';
-import { clientRequest, client } from '../../App';
+import { clientRequest } from '../../App';
 
 import Footer from '../components/footer';
-
 
 export default class Login extends Component {
   constructor(props) {
@@ -26,24 +29,26 @@ export default class Login extends Component {
     this.state = {
       email: '',
       password: '',
+      loading: false,
     };
 
     this.login = this.login.bind(this);
+    this.socialNetworks = this.socialNetworks.bind(this);
   }
 
   async login() {
     const user = {
-      email: this.state.email.toLowerCase().trim(),
+      email: this.state.email.trim().toLowerCase(),
       password: this.state.password.trim(),
     };
 
     if (!validator.isEmail(user.email)) {
-      return Alert.alert('Correo electrónico invalido');
+      return Alert.alert('Error', 'Correo electrónico invalido');
     }
-    if (!user.password.length) {
-      return Alert.alert();
+    if (user.password.length < 6) {
+      return Alert.alert('Error', 'La contraseña debe tener por lo menos 6 caracteres');
     }
-
+    await this.setState({ loading: true });
     try {
       let data = await clientRequest.request(CREATE_SESSION, { user });
       data = data.createSession;
@@ -57,8 +62,12 @@ export default class Login extends Component {
     } catch (err) {
       Alert.alert('Correo electrónico o contraseña no validos');
     }
+    await this.setState({ loading: false });
   }
 
+  socialNetworks() {
+    Alert.alert('Lo sentimos', 'Próximamente podrás iniciar sesión con redes sociales');
+  }
 
   render() {
     return (
@@ -69,19 +78,52 @@ export default class Login extends Component {
           </Body>
         </Header>
 
-        <Content padder>
-          <Form>
-            <Item>
-              <Input placeholder="Correo electrónico" value={this.state.email} onChangeText={email => this.setState({ email })} />
-            </Item>
-            <Item>
-              <Input placeholder="Contraseña" value={this.state.password} secureTextEntry onChangeText={password => this.setState({ password })} />
-            </Item>
-          </Form>
-          <Button onPress={this.login} rounded danger style={{ marginTop: 25, alignSelf: 'center' }}>
-            <Text>Iniciar sesión</Text>
-          </Button>
-        </Content>
+        { this.state.loading
+          ? <Content><Spinner color="red" /></Content>
+          : <Content padder>
+            <View style={{ justifyContent: 'center', alignItems: 'center'}}>
+              <Image
+                source={require('../assets/icon.png')}
+                style={{ width: 100, height: 100 }}
+              />
+
+            </View>
+
+            <Form>
+              <Item floatingLabel>
+                <Label>Correo electrónico</Label>
+                <Input value={this.state.email} onChangeText={email => this.setState({ email })} />
+              </Item>
+              <Item floatingLabel>
+                <Label>Contraseña</Label>
+                <Input value={this.state.password} secureTextEntry onChangeText={password => this.setState({ password })} />
+              </Item>
+              <Button onPress={this.login} rounded danger style={{ marginTop: 25, alignSelf: 'center' }}>
+                <Text>Iniciar sesión</Text>
+              </Button>
+            </Form>
+            <Button
+              iconLeft
+              block
+              primary
+              style={{ marginTop: 25, marginLeft: 10, marginBottom: 10, marginRight: 10 }}
+              onPress={this.socialNetworks}
+            >
+              <Icon name="logo-facebook" />
+              <Text>Facebook</Text>
+            </Button>
+            <Button iconLeft block danger style={{ margin: 10 }} onPress={this.socialNetworks}>
+              <Icon name="logo-googleplus" />
+              <Text>Google</Text>
+            </Button>
+            <Button iconLeft block info style={{ margin: 10 }} onPress={this.socialNetworks}>
+              <Icon name="logo-twitter" />
+              <Text>Twitter</Text>
+            </Button>
+
+          </Content>
+         }
+
 
         <Footer />
       </Container>
