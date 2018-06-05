@@ -16,6 +16,7 @@ import {
 } from 'native-base';
 import { Alert, AsyncStorage, Image } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
+import { Divider } from 'react-native-elements';
 import React, { Component } from 'react';
 import { CREATE_SESSION } from '../queries';
 import { clientRequest } from '../../App';
@@ -96,11 +97,12 @@ export default class Login extends Component {
               <Text>Iniciar sesión</Text>
             </Button>
           </Form>
+          <Divider style={{ backgroundColor: 'red', marginTop: 10 }} />
           <Button
             iconLeft
             block
             primary
-            style={{ marginTop: 25, marginLeft: 10, marginBottom: 10, marginRight: 10 }}
+            style={{ margin: 10 }}
             onPress={this.socialNetworks}
           >
             <Icon name="logo-facebook" />

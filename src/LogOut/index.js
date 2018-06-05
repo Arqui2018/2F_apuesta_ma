@@ -24,7 +24,7 @@ export default class LogOut extends Component {
         await AsyncStorage.removeItem('@bet:token');
       }
 
-      this.props.navigation.navigate('AuthLoading');
+      await this.props.navigation.navigate('AuthLoading');
     } catch (err) {
       Alert.alert(err);
     }

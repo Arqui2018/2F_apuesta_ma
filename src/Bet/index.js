@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Content, Form, H1, H2, H3, Text, Button, Item, Input, View } from 'native-base';
-import Slider from 'react-native-slider';
+import { Slider } from 'react-native-elements';
 import { Col, Grid } from 'react-native-easy-grid';
 import { Alert } from 'react-native';
 import numeral from 'numeral';

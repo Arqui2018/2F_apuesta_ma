@@ -14,6 +14,12 @@ export default class ListProfile extends Component {
             </Body>
           </ListItem>
         ))}
+        <ListItem>
+          <Icon active name="flag" />
+          <Body>
+            <Text>Colombia</Text>
+          </Body>
+        </ListItem>
       </List>
     );
   }
