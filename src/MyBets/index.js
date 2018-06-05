@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 
 import { Container, Content, H1, Spinner } from 'native-base';
 import { Alert, AsyncStorage } from 'react-native';
+import numeral from 'numeral';
 
 import Header from '../components/header';
 import Footer from '../components/footer';
 
 import { clientRequest } from '../../App';
-import { userData, locale } from '../utilities';
+
+import { userData } from '../utilities';
 import { RESULT_BY_USER, SESSION_BY_TOKEN, UPDATE_WALLET, DELETE_RESULT } from '../queries';
 import SwipeRow from './swipeRow';
 
@@ -55,15 +57,15 @@ export default class MyBets extends Component {
           }
         }
         this.setState({ myBets: auxCopy });
-        Alert.alert('Felicitaciones', 'La apuesta ha sido eliminada exitosamente');
+        Alert.alert('Felicitaciones', 'La apuesta ha sido eliminada exitosamente', [{ text: 'Aceptar' }]);
       } catch (err) {
         Alert.alert(err);
       }
     };
 
     Alert.alert(
-      '¿Esta seguro que desea eliminar la apuesta?',
-      `${teams.teamLocal} vs ${teams.teamVisitor} con un valor de $${locale(amount)}`,
+      'Atención',
+      `¿Esta seguro que desea eliminar la apuesta con un monto de ${numeral(amount).format('$0,0.00')}?`,
       [
         { text: 'Cancelar', onPress: () => {}, style: 'cancel' },
         { text: 'Aceptar', onPress: removeBet },

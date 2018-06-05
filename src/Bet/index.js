@@ -5,8 +5,7 @@ import { Col, Grid } from 'react-native-easy-grid';
 import { Alert } from 'react-native';
 import numeral from 'numeral';
 
-
-import { locale, nameTeam, userData } from '../utilities';
+import { nameTeam, userData } from '../utilities';
 import styles from '../assets/css/index';
 
 import Header from '../components/header';
@@ -116,23 +115,23 @@ export default class Bet extends Component {
     if (this.state.goalsLocal.length && this.state.goalsVisitor.length) {
       if (this.state.activity === 'Apostar') {
         Alert.alert(
-          '¿Esta seguro que sea apostar a este partido?',
-          `El valor de la apuesta es de ${locale(this.state.amount)}`,
+          'Atención',
+          `¿Esta seguro que desea apostar al partido entre ${this.state.matchLocal} y ${this.state.matchVisitor} con un monto de ${numeral(this.state.amount).format('$0,0.00')}?`,
           [
             { text: 'Cancelar', onPress: () => {}, style: 'cancel' },
             { text: 'Aceptar', onPress: () => this.createResult() },
-            { cancelable: false },
           ],
+          { cancelable: false },
         );
       } else { // updateBet
         Alert.alert(
-          '¿Esta seguro que sea apostar editar este partido?',
-          `El valor de la apuesta es de ${locale(this.state.amount)}`,
+          'Atención',
+          `¿Esta seguro que sea editar la apuesta del partido entre ${this.state.matchLocal} y ${this.state.matchVisitor} con un monto de ${numeral(this.state.amount).format('$0,0.00')}?`,
           [
             { text: 'Cancelar', onPress: () => {}, style: 'cancel' },
             { text: 'Aceptar', onPress: () => this.updateResult() },
-            { cancelable: false },
           ],
+          { cancelable: false },
         );
       }
     } else {
