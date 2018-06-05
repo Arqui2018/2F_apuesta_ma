@@ -12,10 +12,8 @@ import {
   List,
   ListItem,
   Right,
-  Text,
-  View
+  Text
 } from 'native-base';
-import { SearchBar } from 'react-native-elements'
 
 import MyHeader from '../components/header';
 import Footer from '../components/footer';

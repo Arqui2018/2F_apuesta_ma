@@ -55,7 +55,7 @@ export default class MyBets extends Component {
           }
         }
         this.setState({ myBets: auxCopy });
-        Alert.alert('La apuesta ha sido eliminada exitosamente');
+        Alert.alert('Felicitaciones', 'La apuesta ha sido eliminada exitosamente');
       } catch (err) {
         Alert.alert(err);
       }

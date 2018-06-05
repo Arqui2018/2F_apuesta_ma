@@ -162,7 +162,7 @@ export default class Bet extends Component {
         { id: user.id, wallet: { balance: originalAmount - result.amount } },
       );
       await Promise.all([dataResult, dataWallet]);
-      Alert.alert('Felicitaciones', 'Apuesta ha sido editada Exitosamente');
+      Alert.alert('Felicitaciones', 'La apuesta ha sido editada exitosamente');
       this.props.navigation.navigate('MyBets'); // return mybets
     } catch (err) {
       Alert.alert(JSON.stringify(err));
@@ -187,7 +187,7 @@ export default class Bet extends Component {
         { id: user.id, wallet: { balance: -result.amount } }, // calc diference
       );
       await Promise.all([dataResult, dataWallet]);
-      Alert.alert('Felicitaciones', 'Apuesta creata Exitosamente');
+      Alert.alert('Felicitaciones', 'La apuesta ha sido creada exitosamente');
       this.props.navigation.navigate('Home'); // return home
     } catch (err) {
       Alert.alert(String(err));
