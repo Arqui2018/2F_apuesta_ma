@@ -40,7 +40,7 @@ export default class MatchesByDate extends Component {
         <Header nameIcon="arrow-back" redirect={() => this.props.navigation.goBack()} />
 
         <Content>
-          <H1 style={{ textAlign: 'center', margin: 25 }}>Fecha</H1>
+          <H1 style={{ textAlign: 'center', margin: 25 }}>Fecha de los partidos</H1>
           <List>
             {this.getAllDays()}
           </List>

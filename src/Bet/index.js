@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { Container, Content, Form, H1, Text, Button, Item, Input, View } from 'native-base';
+import { Container, Content, Form, H1, H2, H3, Text, Button, Item, Input, View } from 'native-base';
 import Slider from 'react-native-slider';
 import { Col, Grid } from 'react-native-easy-grid';
 import { Alert } from 'react-native';
+import numeral from 'numeral';
+
 
 import { locale, nameTeam, userData } from '../utilities';
 import styles from '../assets/css/index';
@@ -12,7 +14,6 @@ import Footer from '../components/footer';
 
 import { clientRequest } from '../../App';
 import { RESULT_BY_MATCH, CREATE_RESULT, UPDATE_WALLET, MATCH_BY_ID, UPDATE_RESULT } from '../queries';
-
 
 export default class Bet extends Component {
   constructor(props) {
@@ -236,7 +237,7 @@ export default class Bet extends Component {
             <Grid>
               <Col>
                 <View style={styles.bet}>
-                  <Text style={{ alignSelf: 'center' }}>Cantidad de Apuesta</Text>
+                  <H2 style={{ alignSelf: 'center' }}>Cantidad de Apuesta</H2>
                   <Slider
                     value={this.state.amount}
                     onValueChange={value => this.changeValue('amount', value)}
@@ -244,7 +245,7 @@ export default class Bet extends Component {
                     maximumValue={2000000}
                     step={10000}
                   />
-                  <Text style={{ alignSelf: 'center' }}>{`$${locale(this.state.amount)}`}</Text>
+                  <Text style={{ alignSelf: 'center' }}>{numeral(this.state.amount).format('$0,0.00')}</Text>
                 </View>
               </Col>
             </Grid>
@@ -252,27 +253,26 @@ export default class Bet extends Component {
 
             <Grid>
               <Col style={{ marginTop: 23 }}>
-                <Text style={{ alignSelf: 'center' }}>Pozo</Text>
-                <Item rounded>
-                  <Input disabled textAlign="center" value={locale(parseInt(this.state.well, 10))} />
-                </Item>
-
-                <Text style={{ alignSelf: 'center' }}>Numero de Apuestas</Text>
-                <Item rounded>
-                  <Input disabled textAlign="center" value={String(this.state.bets)} />
-                </Item>
+                <H3 style={{ alignSelf: 'center' }}>Pozo</H3>
+                <View style={{ margin: 10, alignSelf: 'center' }}>
+                  <Text>{numeral(this.state.well).format('$0,0.00')}</Text>
+                </View>
+                <H3 style={{ alignSelf: 'center' }}>Mismo partido</H3>
+                <View style={{ margin: 10, alignSelf: 'center' }}>
+                  <Text>{this.state.bets}</Text>
+                </View>
               </Col>
 
               <Col style={{ marginTop: 23 }}>
-                <Text style={{ alignSelf: 'center' }}>Posible Ganancia</Text>
-                <Item rounded>
-                  <Input disabled textAlign="center" value={locale(parseInt(this.state.toWin, 10))} />
-                </Item>
+                <H3 style={{ alignSelf: 'center' }}>Posible Ganancia</H3>
+                <View style={{ margin: 10, alignSelf: 'center' }}>
+                  <Text>{numeral(this.state.toWin).format('$0,0.00')}</Text>
+                </View>
 
-                <Text style={{ alignSelf: 'center' }}>Mismo marcador</Text>
-                <Item rounded>
-                  <Input disabled textAlign="center" value={String(this.state.results)} />
-                </Item>
+                <H3 style={{ alignSelf: 'center' }}>Mismo marcador</H3>
+                <View style={{ margin: 10, alignSelf: 'center' }}>
+                  <Text>{this.state.results}</Text>
+                </View>
               </Col>
             </Grid>
             <Button onPress={() => this.makeAction()} rounded danger style={{ marginTop: 25, alignSelf: 'center' }}>
