@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Content, Form, H1, H2, H3, Text, Button, Item, Input, View } from 'native-base';
+import { Container, Content, Form, H1, H2, H3, Text, Button, Item, Input, View, Left, Right } from 'native-base';
 import { Slider } from 'react-native-elements';
 import { Col, Grid } from 'react-native-easy-grid';
 import { Alert } from 'react-native';
@@ -161,7 +161,7 @@ export default class Bet extends Component {
         { id: user.id, wallet: { balance: originalAmount - result.amount } },
       );
       await Promise.all([dataResult, dataWallet]);
-      Alert.alert('Felicitaciones', 'La apuesta ha sido editada exitosamente');
+      Alert.alert('Felicitaciones', 'La apuesta ha sido editada exitosamente', [{ text: 'Aceptar' }]);
       this.props.navigation.navigate('MyBets'); // return mybets
     } catch (err) {
       Alert.alert(JSON.stringify(err));
@@ -186,7 +186,7 @@ export default class Bet extends Component {
         { id: user.id, wallet: { balance: -result.amount } }, // calc diference
       );
       await Promise.all([dataResult, dataWallet]);
-      Alert.alert('Felicitaciones', 'La apuesta ha sido creada exitosamente');
+      Alert.alert('Felicitaciones', 'La apuesta ha sido creada exitosamente', [{ text: 'Aceptar' }]);
       this.props.navigation.navigate('Home'); // return home
     } catch (err) {
       Alert.alert(String(err));
@@ -237,6 +237,22 @@ export default class Bet extends Component {
               <Col>
                 <View style={styles.bet}>
                   <H2 style={{ alignSelf: 'center' }}>Cantidad de Apuesta</H2>
+
+                  <Grid>
+                    <Col>
+                      <View>
+                        <Text style={{ fontWeight: 'bold' }}>Min:</Text>
+                        <Text>$10,000.00</Text>
+                      </View>
+                    </Col>
+                    <Col>
+                      <View>
+                        <Text style={{ fontWeight: 'bold', alignSelf: 'flex-end' }}>Max:</Text>
+                        <Text style={{ alignSelf: 'flex-end' }}>$2,000,000.00</Text>
+                      </View>
+                    </Col>
+                  </Grid>
+
                   <Slider
                     value={this.state.amount}
                     onValueChange={value => this.changeValue('amount', value)}
@@ -244,6 +260,7 @@ export default class Bet extends Component {
                     maximumValue={2000000}
                     step={10000}
                   />
+
                   <Text style={{ alignSelf: 'center' }}>{numeral(this.state.amount).format('$0,0.00')}</Text>
                 </View>
               </Col>

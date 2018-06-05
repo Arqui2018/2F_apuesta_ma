@@ -64,7 +64,7 @@ export default class Login extends Component {
   }
 
   socialNetworks() {
-    Alert.alert('Lo sentimos', 'Próximamente podrás iniciar sesión con redes sociales');
+    Alert.alert('Lo sentimos', 'Próximamente podrás iniciar sesión con redes sociales', [{ text: 'Aceptar' }]);
   }
 
   render() {
