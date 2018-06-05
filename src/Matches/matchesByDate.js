@@ -1,17 +1,23 @@
 import React, { Component } from 'react';
 import {
   Body,
+  Button,
   Container,
   Content,
   H1,
   Icon,
+  Input,
+  Header,
+  Item,
   List,
   ListItem,
   Right,
-  Text
+  Text,
+  View
 } from 'native-base';
+import { SearchBar } from 'react-native-elements'
 
-import Header from '../components/header';
+import MyHeader from '../components/header';
 import Footer from '../components/footer';
 
 export default class MatchesByDate extends Component {
@@ -37,7 +43,18 @@ export default class MatchesByDate extends Component {
   render() {
     return (
       <Container>
-        <Header nameIcon="arrow-back" redirect={() => this.props.navigation.goBack()} />
+        <MyHeader nameIcon="arrow-back" redirect={() => this.props.navigation.goBack()} />
+
+        <Header searchBar rounded style={{ backgroundColor: 'red' }}>
+          <Item>
+            <Icon name="ios-search" />
+            <Input placeholder="Escribe tu equipo favorito" />
+            <Icon name="flag" />
+          </Item>
+          <Button transparent>
+            <Text>Search</Text>
+          </Button>
+        </Header>
 
         <Content>
           <H1 style={{ textAlign: 'center', margin: 25 }}>Fecha de los partidos</H1>

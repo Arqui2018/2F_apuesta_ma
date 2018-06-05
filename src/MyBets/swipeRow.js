@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { Text, SwipeRow, View, Icon, Button } from 'native-base';
 import { Alert } from 'react-native';
 
-
 import { clientRequest } from '../../App';
 import { nameTeam, locale } from '../utilities';
 import { MATCH_BY_ID } from '../queries';
